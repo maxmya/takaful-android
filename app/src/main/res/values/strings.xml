@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Takaful</string>
+    <string name="login_to_existing_account">Login To Existing Account</string>
+    <string name="register_a_new_account">Register A New Account</string>
+    <string name="create_account">إنشاء حساب</string>
+    <string name="name_field">الأسم</string>
+    <string name="password_label">كلمة المرور</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="create">إنشاء</string>
+    <string name="fill_field_please">من فضلك قم بملئ هذا الحقل</string>
+    <string name="terms_conditions">بإنشاء حساب فأنت توافق علي شروط و أحكام استخدام تطبيق تكافل</string>
+    <string name="terms_conditions_word">شروط و أحكام</string>
+</resources>

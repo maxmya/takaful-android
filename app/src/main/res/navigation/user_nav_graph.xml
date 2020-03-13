@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/login_nav_graph"
+    app:startDestination="@id/login">
+
+    <fragment
+        android:id="@+id/login"
+        android:name="com.takaful.user.ui.fragments.LoginFragment"
+        android:label="LoginFragment">
+        <action
+            android:id="@+id/to_registration"
+            app:destination="@id/registration" />
+    </fragment>
+    <fragment
+        android:id="@+id/registration"
+        android:name="com.takaful.user.ui.fragments.RegistrationFragment"
+        android:label="RegistrationFragment">
+        <action
+            android:id="@+id/to_login"
+            app:destination="@id/login" />
+    </fragment>
+</navigation>
