@@ -41,6 +41,9 @@ class RegistrationFragment : Fragment() {
     private fun registerAction() {
         btnCreate.setOnClickListener {
 
+            progress.visibility = View.INVISIBLE
+            message.visibility = View.INVISIBLE
+
             if (fieldFullName.text.isEmpty()) {
                 fieldFullName.requestFocus()
                 fieldFullName.error = getString(R.string.fill_field_please)
@@ -74,19 +77,31 @@ class RegistrationFragment : Fragment() {
             RetrofitClient
                 .INSTANCE
                 .registerUser(accountRequest)
+                .doOnRequest {
+                    App.appExecutors.mainThread().execute {
+                        btnCreate.isEnabled = false
+                        progress.visibility = View.VISIBLE
+                        message.visibility = View.INVISIBLE
+                    }
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.newThread())
                 .doOnError {
                     App.appExecutors.mainThread().execute {
-                        Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                        btnCreate.isEnabled = true
+                        progress.visibility = View.INVISIBLE
+                        message.visibility = View.VISIBLE
+                        message.text = it.message
                     }
                 }
                 .subscribe {
                     App.appExecutors.mainThread().execute {
-                        Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                        btnCreate.isEnabled = true
+                        progress.visibility = View.INVISIBLE
+                        message.visibility = View.VISIBLE
+                        message.text = it.message
                     }
                 }
-
 
         }
     }
