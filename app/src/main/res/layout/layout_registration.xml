@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,8 +16,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/back_to_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_20sdp"
+            android:src="@drawable/back"
+            android:tint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/logo"
             android:layout_width="@dimen/_120sdp"
             android:layout_height="@dimen/_120sdp"
             android:src="@drawable/logo_white_login"
@@ -72,7 +83,7 @@
             <EditText
                 android:id="@+id/fieldFullName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_28sdp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/rounded_shape_edit_text"
@@ -107,7 +118,7 @@
             <EditText
                 android:id="@+id/fieldPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_28sdp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/rounded_shape_edit_text"
@@ -143,23 +154,27 @@
             <EditText
                 android:id="@+id/fieldPhone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_28sdp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/rounded_shape_edit_text"
                 android:fontFamily="@font/sans_plain"
+                android:hint="@string/phone_hint"
                 android:inputType="phone"
                 android:lines="1"
+                android:maxLength="14"
+                android:nextFocusForward="@id/btnCreate"
                 android:padding="@dimen/_2sdp"
                 android:paddingStart="@dimen/_10sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:textAlignment="viewStart"
-                tools:ignore="RtlCompat"
-                tools:text="01099925622" />
+                tools:ignore="RtlCompat" />
+
 
         </LinearLayout>
 
         <TextView
+
             android:id="@+id/terms_conditions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -190,24 +205,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCreate" />
-
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/sans_plain"
-        android:textAlignment="center"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/progress"
-        tools:text="user created successfully" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

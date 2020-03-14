@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Takaful</string>
     <string name="login_to_existing_account">Login To Existing Account</string>
-    <string name="register_a_new_account">Register A New Account</string>
+    <string name="register_a_new_account">ليس لدي حساب , إنشاء حساب</string>
     <string name="create_account">إنشاء حساب</string>
     <string name="name_field">الأسم</string>
     <string name="password_label">كلمة المرور</string>
@@ -10,4 +10,17 @@
     <string name="fill_field_please">من فضلك قم بملئ هذا الحقل</string>
     <string name="terms_conditions">بإنشاء حساب فأنت توافق علي شروط و أحكام استخدام تطبيق تكافل</string>
     <string name="terms_conditions_word">شروط و أحكام</string>
+    <string name="terms_and_conditions_title"><![CDATA[Terms & Conditions]]></string>
+    <string name="sign_in">تسجيل دخول</string>
+    <string name="forgot_password">نسيت كلمه المرور؟</string>
+    <string name="login_btn">تسجيل الدخول</string>
+    <string name="valid_field_please">من فضلك قم بادخال بيانات صحيحه</string>
+    <string name="valid_password_length">من فضلك ادخل كلمه مرور بحد ادني
+        6
+        رموز</string>
+    <string name="phone_number_regex">01[0|1|2|5][0-9]{8}</string>
+    <string name="phone_hint">010 000-00-000</string>
+    <string name="loading">جاري التحميل</string>
+    <string name="general_error">حدث خطأما من فضلك حاول مره اخرى</string>
+    <string name="full_name_regex">[A-Za-z ]+</string>
 </resources>

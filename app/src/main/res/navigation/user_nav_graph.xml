@@ -10,7 +10,14 @@
         android:label="LoginFragment">
         <action
             android:id="@+id/to_registration"
-            app:destination="@id/registration" />
+            app:destination="@id/registration"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <argument
+            android:name="userRequest"
+            app:argType="com.takaful.user.network.data.UserTokenRequest"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/registration"
@@ -18,6 +25,15 @@
         android:label="RegistrationFragment">
         <action
             android:id="@+id/to_login"
-            app:destination="@id/login" />
+            app:destination="@id/login"
+            app:enterAnim="@anim/enter_from_left"
+            app:exitAnim="@anim/exit_to_right" />
+        <action
+            android:id="@+id/to_terms"
+            app:destination="@id/terms" />
     </fragment>
+    <fragment
+        android:id="@+id/terms"
+        android:name="com.takaful.user.ui.fragments.TermsAndConditionsFragment"
+        android:label="TermsAndConditionsFragment" />
 </navigation>

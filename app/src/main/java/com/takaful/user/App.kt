@@ -16,31 +16,34 @@ class App : Application() {
 
         // const and global assignable
         var TOKEN = ""
+        var userFullName = ""
+
 
         const val TOKEN_KEY = "token_key"
-        const val USERNAME = "username"
+        const val USER_FULL_NAME = "user-full-name"
 
         // late-init dependencies
         lateinit var sPrefs: SharedPreferences
 
         lateinit var appExecutors: AppExecutors
 
-        lateinit var username: String
 
     }
 
 
     override fun onCreate() {
         super.onCreate()
+
         sPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         TOKEN = sPrefs.getString(TOKEN_KEY, "").toString()
+        userFullName = sPrefs.getString(USER_FULL_NAME, "").toString()
+
         appExecutors = AppExecutors(
             newSingleThreadExecutor(),
             newFixedThreadPool(3),
             MainThreadExecutor()
         )
 
-        username = sPrefs.getString(USERNAME, "").toString()
     }
 
 }
