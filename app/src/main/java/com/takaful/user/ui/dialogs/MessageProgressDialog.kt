@@ -1,4 +1,4 @@
-package com.takaful.user.ui
+package com.takaful.user.ui.dialogs
 
 import android.app.Activity
 import android.view.View

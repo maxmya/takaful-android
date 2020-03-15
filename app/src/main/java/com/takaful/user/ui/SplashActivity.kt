@@ -3,9 +3,10 @@ package com.takaful.user.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import com.takaful.user.App
 import com.takaful.user.R
+import com.takaful.user.handlers.AppExecutorsClient
+import com.takaful.user.handlers.PreferenceManger
 
 class SplashActivity : AppCompatActivity() {
 
@@ -13,14 +14,14 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        Handler().postDelayed({
-            openDesiredActivityPath()
-        }, 3000
+        AppExecutorsClient.handlerDelayed({
+                openDesiredActivityPath()
+            }, 3000
         )
     }
 
     private fun openDesiredActivityPath() {
-        if (App.TOKEN.isEmpty()) {
+        if (PreferenceManger.retrieveToken().isEmpty()) {
             val intent = Intent(this, UserActivity::class.java)
             startActivity(intent)
         } else {

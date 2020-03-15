@@ -1,6 +1,6 @@
 package com.takaful.user.network.interceptors
 
-import com.takaful.user.App
+import com.takaful.user.handlers.PreferenceManger
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -12,7 +12,7 @@ class AuthInterceptor : Interceptor {
         val requestBuilder =
             original
                 .newBuilder()
-                .addHeader("Authorization", "Bearer " + App.TOKEN)
+                .addHeader("Authorization", "Bearer " + PreferenceManger.retrieveToken())
                 .method(original.method, original.body)
 
         val request = requestBuilder.build()

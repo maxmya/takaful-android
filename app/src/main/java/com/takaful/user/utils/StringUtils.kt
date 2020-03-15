@@ -16,16 +16,13 @@ import androidx.core.content.ContextCompat
 import com.github.vacxe.phonemask.PhoneMaskManager
 import com.takaful.user.R
 
-class StringUtils {
-
-    companion object {
+object StringUtils {
 
         fun makeUrlColoredSpan(
             sentence: String,
             word: String,
             textView: TextView,
-            clickableSpan: ClickableSpan
-        ) {
+            clickableSpan: ClickableSpan) {
 
             val builder = SpannableStringBuilder()
             val startIndex = sentence.indexOf(word)
@@ -37,24 +34,19 @@ class StringUtils {
                 boldSpan,
                 startIndex,
                 endIndex,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-
-
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             spannableString.setSpan(
                 clickableSpan,
                 startIndex,
                 endIndex,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             spannableString.setSpan(
                 ForegroundColorSpan(ContextCompat.getColor(textView.context, R.color.colorPrimary)),
                 startIndex,
                 endIndex,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
 
             builder.append(spannableString)
@@ -78,5 +70,5 @@ class StringUtils {
                 .trim()
         }
 
-    }
+
 }

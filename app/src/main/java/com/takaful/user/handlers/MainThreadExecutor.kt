@@ -1,4 +1,4 @@
-package com.takaful.user.utils
+package com.takaful.user.handlers
 
 import android.os.Handler
 import android.os.Looper

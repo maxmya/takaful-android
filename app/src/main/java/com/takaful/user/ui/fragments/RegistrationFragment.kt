@@ -1,7 +1,6 @@
 package com.takaful.user.ui.fragments
 
 import android.os.Bundle
-import android.os.Handler
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -9,19 +8,16 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.github.vacxe.phonemask.PhoneMaskManager
-import com.takaful.user.App
 import com.takaful.user.R
-import com.takaful.user.exceptions.ConnectionException
 import com.takaful.user.network.data.UserRegisterRequest
 import com.takaful.user.network.data.UserRegisterResponse
 import com.takaful.user.network.data.UserTokenRequest
 import com.takaful.user.network.retrofit.RetrofitClient
-import com.takaful.user.ui.MessageProgressDialog
+import com.takaful.user.ui.dialogs.MessageProgressDialog
+import com.takaful.user.handlers.AppExecutorsClient
 import com.takaful.user.utils.StringUtils
-import com.takaful.user.utils.StringUtils.Companion.getUnmaskedPhone
+import com.takaful.user.utils.StringUtils.getUnmaskedPhone
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.layout_login.*
 import kotlinx.android.synthetic.main.layout_registration.*
 import kotlinx.android.synthetic.main.layout_registration.fieldPassword
 import kotlinx.android.synthetic.main.layout_registration.fieldPhone
@@ -71,7 +67,8 @@ class RegistrationFragment : Fragment() {
         registerAction()
 
 
-        progressDialog = MessageProgressDialog(requireActivity())
+        progressDialog =
+            MessageProgressDialog(requireActivity())
 
 
     }
@@ -157,7 +154,7 @@ class RegistrationFragment : Fragment() {
                 UserRegisterResponse(false, getString(R.string.general_error))
             }
             .doOnRequest {
-                App.appExecutors.mainThread().execute {
+                AppExecutorsClient.mainThread().execute {
                     btnCreate.isEnabled = false
                     progressDialog.loading()
                 }
@@ -165,10 +162,10 @@ class RegistrationFragment : Fragment() {
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.newThread())
             .subscribe {
-                App.appExecutors.mainThread().execute {
+                AppExecutorsClient.mainThread().execute {
                     progressDialog.show(it.message)
                     if (it.success) {
-                        Handler().postDelayed({
+                        AppExecutorsClient.handlerDelayed({
                             progressDialog.dismiss()
                             openLogin(
                                 btnCreate,
@@ -180,7 +177,7 @@ class RegistrationFragment : Fragment() {
                         }, 1000)
                     } else {
                         btnCreate.isEnabled = true
-                        Handler().postDelayed({
+                        AppExecutorsClient.handlerDelayed({
                             progressDialog.dismiss()
                         }, 3000)
                     }
