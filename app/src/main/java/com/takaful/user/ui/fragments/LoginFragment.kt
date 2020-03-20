@@ -26,8 +26,7 @@ import kotlinx.android.synthetic.main.layout_login.fieldPhone
 
 class LoginFragment : Fragment() {
 
-    private val progressDialog = MessageProgressDialog(requireActivity())
-
+    lateinit var progressDialog : MessageProgressDialog
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +38,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         StringUtils.maskPhoneField(fieldPhone)
-
+        progressDialog = MessageProgressDialog(requireActivity())
         val statement = getString(R.string.register_a_new_account)
         val word = getString(R.string.create_account)
 

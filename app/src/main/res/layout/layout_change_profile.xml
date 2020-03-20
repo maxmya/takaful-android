@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="124dp"
+        android:layout_height="37dp"
+        android:text="@string/account"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="181dp"
+        android:layout_height="139dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/account_on" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="90dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="156dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.644"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/group_288" />
+
+
+    <EditText
+        android:id="@+id/fieldPhone"
+        android:layout_width="285dp"
+        android:layout_height="29dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_shape_edit_text"
+        android:fontFamily="@font/sans_plain"
+        android:hint="@string/phone_hint"
+        android:inputType="phone"
+        android:lines="1"
+        android:maxLength="14"
+        android:nextFocusForward="@id/btnCreate"
+        android:padding="@dimen/_2sdp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlCompat"
+        tools:layout_editor_absoluteY="389dp" />
+
+    <TextView
+
+        android:id="@+id/textView5"
+        android:layout_width="76dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="160dp"
+        android:fontFamily="@font/sans_plain"
+        android:text="@string/phone_number"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toEndOf="@+id/fieldPhone" />
+
+    <EditText
+        android:id="@+id/fieldFullName"
+        android:layout_width="289dp"
+        android:layout_height="33dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_shape_edit_text"
+        android:fontFamily="@font/sans_plain"
+        android:inputType="textPersonName"
+        android:lines="1"
+        android:padding="@dimen/_2sdp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:textAlignment="viewStart"
+        app:layout_constraintBottom_toTopOf="@+id/fieldPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.518"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:layout_width="76dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/sans_plain"
+        android:text="@string/name_field"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fieldFullName"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="228dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="110dp"
+        android:text="@string/save_Changes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fieldPhone"
+        app:layout_constraintVertical_bias="0.366" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
