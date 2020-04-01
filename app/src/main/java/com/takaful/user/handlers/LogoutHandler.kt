@@ -4,7 +4,7 @@ object LogoutHandler {
 
     fun doLogout() {
         PreferenceManger.deleteToken()
-        PreferenceManger.deleteToken()
+        PreferenceManger.deleteUserData()
     }
 
 }

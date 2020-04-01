@@ -1,30 +1,38 @@
 package com.takaful.user.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.takaful.user.App
+import androidx.navigation.ui.NavigationUI
 import com.takaful.user.R
-import com.takaful.user.handlers.LogoutHandler
-import com.takaful.user.handlers.PreferenceManger
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
+    private val navController: NavController by lazy {
+        Navigation.findNavController(this, R.id.home_nav_host)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        val navController = Navigation.findNavController(this, R.id.activity_home)
-        navController.navigate(R.id.changeProfileFragment, null)
 
-
-        userFullName.text = PreferenceManger.retrieveUserData().fullName
-
-        logout.setOnClickListener {
-            LogoutHandler.doLogout()
-            startActivity(Intent(this, SplashActivity::class.java))
+        setSupportActionBar(toolbar)
+        nav_bar.let {
+            NavigationUI.setupWithNavController(it, navController)
         }
 
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(navController, null)
     }
 }

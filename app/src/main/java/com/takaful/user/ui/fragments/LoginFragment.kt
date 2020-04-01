@@ -6,7 +6,6 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.takaful.user.R
@@ -26,17 +25,17 @@ import kotlinx.android.synthetic.main.layout_login.fieldPhone
 
 class LoginFragment : Fragment() {
 
-    lateinit var progressDialog : MessageProgressDialog
+    lateinit var progressDialog: MessageProgressDialog
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.layout_login, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
+    private fun setupUi() {
         StringUtils.maskPhoneField(fieldPhone)
         progressDialog = MessageProgressDialog(requireActivity())
         val statement = getString(R.string.register_a_new_account)
@@ -50,6 +49,12 @@ class LoginFragment : Fragment() {
         }
 
         StringUtils.makeUrlColoredSpan(statement, word, open_reg_screen, clickableSpan)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupUi()
 
         requireArguments().let {
             val loginRequest = LoginFragmentArgs.fromBundle(it).userRequest
@@ -67,9 +72,17 @@ class LoginFragment : Fragment() {
                     loginByNetworkCall(
                         UserTokenRequest(
                             StringUtils.getUnmaskedPhone(fieldPhone),
-                            fieldPassword.text.toString()))
+                            fieldPassword.text.toString()
+                        )
+                    )
                 }
             }
+        }
+
+        textView3.setOnClickListener {
+            val intent = Intent(requireActivity(), HomeActivity::class.java)
+            requireActivity().startActivity(intent)
+            requireActivity().finish()
         }
     }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Takaful</string>
+    <string name="app_name">Dawa</string>
     <string name="login_to_existing_account">Login To Existing Account</string>
     <string name="register_a_new_account">ليس لدي حساب , إنشاء حساب</string>
     <string name="create_account">إنشاء حساب</string>
@@ -18,14 +18,17 @@
     <string name="valid_password_length">من فضلك ادخل كلمه مرور بحد ادني
         6
         رموز</string>
-    <string name="phone_number_regex">01[0|1|2|5][0-9]{8}</string>
-    <string name="phone_hint">010 000-00-000</string>
     <string name="loading">جاري التحميل</string>
     <string name="general_error">حدث خطأما من فضلك حاول مره اخرى</string>
-    <string name="full_name_regex">[A-Za-z ]+</string>
+
+
+    <string name="full_name_regex" translatable="false">[A-Za-z ]+</string>
+    <string name="phone_number_regex" translatable="false">01[0|1|2|5][0-9]{8}</string>
+    <string name="phone_hint" translatable="false">010 000-00-000</string>
 
     <string name="account">الحساب</string>
     <string name="save_Changes">حفظ التغيرات</string>
+    <string name="logout_btn">تسجيل خروج</string>
 
 
 </resources>
