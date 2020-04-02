@@ -94,10 +94,11 @@ data class UserProfileResponse(
     val phone: String = "",
     val fullName: String = "",
     val pictureUrl: String = "",
-    val token: String = "",
-    val medications: List<MedicationsDTO> = mutableListOf(),
-    val reportDTOS: List<ReportDTO> = mutableListOf(),
-    val suggestions: List<SuggestionsDTO> = mutableListOf(),
-    val notifications: List<NotificationDTO> = mutableListOf(),
-    val preservations: List<PreservationsDTO> = mutableListOf()
+    val token: String = ""
+)
+data class ChangeProfileRequest(
+    val phone: String,
+    val fullName: String,
+//    val pictureUrl: String,
+    val userName: String
 )
