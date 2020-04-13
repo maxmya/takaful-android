@@ -62,6 +62,15 @@ data class ReportDTO(
     val payload: String,
     val timestamp: Timestamp
 )
+data class MedicationsMock(
+    val id: Int,
+    val name: String,
+    val lang: Double,
+    val lat: Double,
+    val imageUrl: String,
+    val addressTitle: String
+)
+
 
 data class MedicationsDTO(
     val id: Int,

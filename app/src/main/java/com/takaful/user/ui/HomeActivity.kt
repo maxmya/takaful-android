@@ -20,6 +20,8 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         setSupportActionBar(toolbar)
+        NavigationUI.setupActionBarWithNavController(this, navController)
+
         nav_bar.let {
             NavigationUI.setupWithNavController(it, navController)
         }

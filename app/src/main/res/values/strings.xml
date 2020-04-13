@@ -29,6 +29,8 @@
     <string name="account">الحساب</string>
     <string name="save_Changes">حفظ التغيرات</string>
     <string name="logout_btn">تسجيل خروج</string>
+    <string name="my_medications">ادويتي</string>
+    <string name="search">ابحث</string>
     <string name="permission_Denied">طلب الاذن مرفوض</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
