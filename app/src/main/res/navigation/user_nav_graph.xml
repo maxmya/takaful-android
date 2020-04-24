@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/login"
-        android:name="com.takaful.user.ui.fragments.LoginFragment"
+        android:name="com.dawa.user.ui.fragments.LoginFragment"
         android:label="LoginFragment">
         <action
             android:id="@+id/to_registration"
@@ -15,13 +15,13 @@
             app:exitAnim="@anim/fade_out" />
         <argument
             android:name="userRequest"
-            app:argType="com.takaful.user.network.data.UserTokenRequest"
+            app:argType="com.dawa.user.network.data.UserTokenRequest"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/registration"
-        android:name="com.takaful.user.ui.fragments.RegistrationFragment"
+        android:name="com.dawa.user.ui.fragments.RegistrationFragment"
         android:label="RegistrationFragment">
         <action
             android:id="@+id/to_login"
@@ -34,6 +34,6 @@
     </fragment>
     <fragment
         android:id="@+id/terms"
-        android:name="com.takaful.user.ui.fragments.TermsAndConditionsFragment"
+        android:name="com.dawa.user.ui.fragments.TermsAndConditionsFragment"
         android:label="TermsAndConditionsFragment" />
 </navigation>

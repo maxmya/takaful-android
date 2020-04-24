@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.github.siyamed.shapeimageview.CircularImageView
+        android:id="@+id/profile_picture"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_100sdp"
         android:layout_marginTop="@dimen/_40sdp"
@@ -20,9 +20,9 @@
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_picture"
+        app:layout_constraintEnd_toEndOf="@+id/profile_picture"
+        app:layout_constraintTop_toBottomOf="@+id/profile_picture"
         app:srcCompat="@drawable/group_288" />
 
 
@@ -103,8 +103,8 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/rounded_shape_edit_text"
                 android:fontFamily="@font/sans_plain"
-                android:inputType="phone"
                 android:hint="@string/phone_hint"
+                android:inputType="phone"
                 android:lines="1"
                 android:maxLength="14"
                 android:padding="@dimen/_2sdp"

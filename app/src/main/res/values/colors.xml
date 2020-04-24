@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#317f87</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#AF0A0A</color>
+    <color name="colorAccent">#4a4165</color>
     <color name="grayBackground">#F5F5F5</color>
     <color name="gradStart">#258C7F</color>
     <color name="gradEnd">#34B88F</color>
