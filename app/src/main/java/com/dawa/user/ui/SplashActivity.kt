@@ -3,7 +3,6 @@ package com.dawa.user.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.dawa.user.App
 import com.dawa.user.R
 import com.dawa.user.handlers.AppExecutorsClient
 import com.dawa.user.handlers.PreferenceManger

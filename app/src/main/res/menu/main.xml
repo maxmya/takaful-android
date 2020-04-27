@@ -12,7 +12,6 @@
 
     <item
         android:id="@+id/addDrag"
-        android:icon="@drawable/add_drug_off"
         android:title="" />
 
     <item

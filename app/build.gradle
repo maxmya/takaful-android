@@ -64,7 +64,7 @@ dependencies {
     implementation 'com.github.vacxe:phonemask:1.0.5'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.3'
     implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
-
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
     //networking
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
