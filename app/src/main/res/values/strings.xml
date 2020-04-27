@@ -35,6 +35,13 @@
     <string name="yes">نعم</string>
     <string name="no">لا</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="medication_name">أسم الدواء</string>
+    <string name="add_image">اضف صوره للدواء</string>
+    <string name="add_medication">إضافه الدواء</string>
+    <string name="category">الفئه</string>
+    <string name="address">العنوان</string>
 
 
 </resources>

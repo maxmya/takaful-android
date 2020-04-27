@@ -9,6 +9,19 @@ import java.sql.Timestamp
   for one business cases
  */
 
+class Pageable<T> {
+    var pageAbleList: List<T> = mutableListOf()
+    var pagination: Pagination? = null
+    var next = false
+}
+
+
+data class Pagination (
+    var currentPage: Int = 0,
+    var lastPage : Int = 0,
+    var pageSize : Int = 0
+)
+
 data class UserRegisterRequest(
     val username: String,
     val password: String,
@@ -80,9 +93,9 @@ data class MedicationsDTO(
     val lat: Double,
     val imageUrl: String,
     val addressTitle: String,
-    val userDTO: MedicineUserDTO,
-    val categoryDTO: MedicineCategoryDTO,
-    val preserver: PreservationsDTO
+    val userDTO: MedicineUserDTO?,
+    val categoryDTO: MedicineCategoryDTO?,
+    val preserver: PreservationsDTO?
 )
 
 data class MedicineUserDTO(
@@ -96,7 +109,7 @@ data class MedicineUserDTO(
 data class MedicineCategoryDTO(
     val id: Int,
     val name: String,
-    val imageUrl: String
+    val imageUrl: String?
 )
 
 data class UserProfileResponse(

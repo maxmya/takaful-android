@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.dawa.user.R
-import com.dawa.user.network.data.MedicationsMock
+import com.dawa.user.network.data.MedicationsDTO
 import kotlinx.android.synthetic.main.layout_item_midication.view.*
 
 
-class HomeMedicationsAdapter(private val medicationsList: List<MedicationsMock>) :
+class HomeMedicationsAdapter(private val medicationsList: List<MedicationsDTO>) :
     RecyclerView.Adapter<HomeMedicationsViewHolder>() {
 
 
@@ -31,7 +31,7 @@ class HomeMedicationsAdapter(private val medicationsList: List<MedicationsMock>)
 
         Picasso
             .get()
-            .load(R.drawable.medication)
+            .load(currentMedication.imageUrl)
             .placeholder(R.drawable.medication)
             .into(holder.itemView.linearLayout4)
 

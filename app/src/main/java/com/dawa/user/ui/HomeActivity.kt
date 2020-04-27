@@ -26,6 +26,9 @@ class HomeActivity : AppCompatActivity() {
             NavigationUI.setupWithNavController(it, navController)
         }
 
+        fab.setOnClickListener {
+            navController.navigate(R.id.addMedicationFragment)
+        }
 
     }
 

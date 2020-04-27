@@ -16,6 +16,13 @@ interface DawaAPIService {
     @POST("user/auth/login")
     fun loginUser(@Body tokenRequest: UserTokenRequest): Flowable<ResponseWrapper<UserProfileResponse>>
 
+    @GET("medication/list")
+    fun listMedications(): Flowable<Pageable<MedicationsDTO>>
+
+    @GET("medication/categories")
+    fun listMedicationsCategories(): Flowable<List<MedicineCategoryDTO>>
+
+
     @Multipart
     @PUT("user/auth/user")
     fun changeUserProfile(

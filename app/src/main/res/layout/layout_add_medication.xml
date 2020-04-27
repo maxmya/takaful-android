@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/add_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/borderd"
+        android:orientation="vertical"
+        android:padding="@dimen/_30sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/add_photo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/sans_plain"
+            android:text="@string/add_image"
+            android:textAlignment="center"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20sdp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/add_image"
+        tools:layout_editor_absoluteX="26dp">
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            app:layout_constraintTop_toBottomOf="@+id/add_image"
+            tools:layout_editor_absoluteX="13dp">
+
+            <TextView
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sans_plain"
+                android:text="@string/medication_name"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/medicationName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:background="@drawable/rounded_shape_edit_text"
+                android:fontFamily="@font/sans_plain"
+                android:inputType="textPersonName"
+                android:lines="1"
+                android:padding="@dimen/_2sdp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:textAlignment="viewStart"
+                tools:ignore="RtlCompat"
+                tools:text="كومتريكس" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layoutDirection="rtl"
+            app:layout_constraintTop_toBottomOf="@+id/add_image"
+            tools:layout_editor_absoluteX="13dp">
+
+            <TextView
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sans_plain"
+                android:text="@string/address"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:background="@drawable/rounded_shape_edit_text"
+                android:fontFamily="@font/sans_plain"
+                android:inputType="textPersonName"
+                android:lines="1"
+                android:padding="@dimen/_2sdp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:textAlignment="viewStart"
+                tools:ignore="RtlCompat"
+                tools:text="22 شارع 104 المعادي" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layoutDirection="rtl"
+            app:layout_constraintTop_toBottomOf="@+id/add_image"
+            tools:layout_editor_absoluteX="13dp">
+
+            <TextView
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sans_plain"
+                android:text="@string/category"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:background="@drawable/rounded_shape_edit_text"
+                android:fontFamily="@font/sans_plain"
+                android:inputType="textPersonName"
+                android:lines="1"
+                android:padding="@dimen/_2sdp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:textAlignment="viewStart"
+                tools:ignore="RtlCompat"
+                tools:text="22 شارع 104 المعادي" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_med"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_30sdp"
+        android:backgroundTint="@color/colorPrimary"
+        android:fontFamily="@font/sans_plain"
+        android:paddingStart="@dimen/_40sdp"
+        android:paddingEnd="@dimen/_40sdp"
+        android:text="@string/add_medication"
+        android:textColor="@android:color/white"
+        app:cornerRadius="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
