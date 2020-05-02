@@ -24,7 +24,8 @@ interface DawaAPIService {
 
     @GET("medication/categories")
     fun listMedicationsCategories(): Flowable<List<MedicineCategoryDTO>>
-
+    @POST("medication/preserve/{id}")
+    fun medicinePreservation(@Path("id") id: Int): Flowable<ErrorClass>
     @Multipart
     @POST("medication/add")
     fun addMedication(@Part file: MultipartBody.Part?,

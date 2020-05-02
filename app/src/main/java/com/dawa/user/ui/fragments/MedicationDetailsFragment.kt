@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.dawa.user.R
 import com.dawa.user.handlers.AppExecutorsService
+import com.dawa.user.network.data.ErrorClass
+import com.dawa.user.network.data.UserRegisterResponse
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.dialogs.MessageProgressDialog
 import com.squareup.picasso.Picasso
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_medication_details.*
+import java.lang.Error
 
 
 class MedicationDetailsFragment : Fragment() {
@@ -34,8 +37,10 @@ class MedicationDetailsFragment : Fragment() {
         requireArguments().let {
             val medicationId = MedicationDetailsFragmentArgs.fromBundle(it).medicationId
             loadMedicationDetails(medicationId)
+            reserveButton.setOnClickListener{
+                reserveMedicineWithNetworkCall(medicationId)
+            }
         }
-
     }
 
 
@@ -60,6 +65,44 @@ class MedicationDetailsFragment : Fragment() {
                     }
                 }
             }
+
+    }
+
+    private fun reserveMedicineWithNetworkCall(id: Int) {
+
+        RetrofitClient
+            .INSTANCE
+            .medicinePreservation(id)
+            .onErrorReturn {
+                ErrorClass(false, getString(R.string.general_error))
+            }
+            .doOnRequest {
+                AppExecutorsService.mainThread().execute {
+                    reserveButton.isEnabled = false
+                    progressDialog.loading()
+                }
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.newThread())
+            .subscribe {
+                AppExecutorsService.mainThread().execute {
+                    if (it.success) {
+                        AppExecutorsService.handlerDelayed({
+                            progressDialog.dismiss()
+                            ErrorClass(true, getString(R.string.reserved))
+                        }, 1000)
+                    } else {
+                        reserveButton.isEnabled = true
+                        AppExecutorsService.handlerDelayed({
+                            progressDialog.dismiss()
+                            if(it.message == "alreadyPreserved"){
+                                ErrorClass(false, getString(R.string.alreadyPreserved))
+                            }
+                        }, 3000)
+                    }
+                }
+            }
+
 
     }
 

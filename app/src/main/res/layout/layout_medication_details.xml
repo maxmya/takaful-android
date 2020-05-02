@@ -94,6 +94,7 @@
 
 
     <Button
+        android:id="@+id/reserveButton"
         android:layout_width="@dimen/_200sdp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/sans_plain"

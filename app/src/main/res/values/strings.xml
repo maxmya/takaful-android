@@ -43,6 +43,9 @@
     <string name="category">الفئه</string>
     <string name="address">العنوان</string>
     <string name="pres">حجز</string>
+    <string name="reserved">تم حجز الدواء بنجاح</string>
+    <string name="alreadyPreserved">الدواء محجوز بالفعل , الرجاء اختيار دواء اخر</string>
+
 
 
 </resources>
