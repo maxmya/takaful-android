@@ -14,7 +14,7 @@ import com.dawa.user.network.data.UserRegisterResponse
 import com.dawa.user.network.data.UserTokenRequest
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.dialogs.MessageProgressDialog
-import com.dawa.user.handlers.AppExecutorsClient
+import com.dawa.user.handlers.AppExecutorsService
 import com.dawa.user.utils.StringUtils
 import com.dawa.user.utils.StringUtils.getUnmaskedPhone
 import io.reactivex.schedulers.Schedulers
@@ -154,7 +154,7 @@ class RegistrationFragment : Fragment() {
                 UserRegisterResponse(false, getString(R.string.general_error))
             }
             .doOnRequest {
-                AppExecutorsClient.mainThread().execute {
+                AppExecutorsService.mainThread().execute {
                     btnCreate.isEnabled = false
                     progressDialog.loading()
                 }
@@ -162,10 +162,10 @@ class RegistrationFragment : Fragment() {
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.newThread())
             .subscribe {
-                AppExecutorsClient.mainThread().execute {
+                AppExecutorsService.mainThread().execute {
                     progressDialog.show(it.message)
                     if (it.success) {
-                        AppExecutorsClient.handlerDelayed({
+                        AppExecutorsService.handlerDelayed({
                             progressDialog.dismiss()
                             openLogin(
                                 btnCreate,
@@ -177,7 +177,7 @@ class RegistrationFragment : Fragment() {
                         }, 1000)
                     } else {
                         btnCreate.isEnabled = true
-                        AppExecutorsClient.handlerDelayed({
+                        AppExecutorsService.handlerDelayed({
                             progressDialog.dismiss()
                         }, 3000)
                     }

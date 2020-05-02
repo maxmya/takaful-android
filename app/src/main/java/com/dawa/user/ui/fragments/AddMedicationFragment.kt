@@ -24,30 +24,30 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.dawa.user.R
-import com.dawa.user.handlers.AppExecutorsClient
+import com.dawa.user.handlers.*
+import com.dawa.user.network.data.MedicationCreationForm
 import com.dawa.user.network.data.MedicineCategoryDTO
+import com.dawa.user.network.data.ResponseWrapper
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.dialogs.MessageProgressDialog
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_add_medication.*
 import kotlinx.android.synthetic.main.layout_change_profile.*
+import okhttp3.MultipartBody
 import java.io.File
-
-
-private const val OPERATION_CAPTURE_PHOTO = 1
-private const val OPERATION_CHOOSE_PHOTO = 2
 
 
 class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
-    private var mUri: Uri? = null
-    private var imagePath: String? = null
+    private lateinit var progressDialog: MessageProgressDialog
+    private lateinit var categoryList: List<MedicineCategoryDTO>
 
-    lateinit var progressDialog: MessageProgressDialog
-    lateinit var categoryList: List<MedicineCategoryDTO>
+    lateinit var takePhotoService: TakePhotoService
+    lateinit var imageUri: Uri
+    private var multiPartFile: MultipartBody.Part? = null
 
-    var selectedCategoryId = 0
+    private var selectedCategoryId = 0
 
 
     override fun onCreateView(
@@ -60,7 +60,9 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         progressDialog = MessageProgressDialog(requireActivity())
+        takePhotoService = TakePhotoService(this, requireContext())
         loadCategories()
 
 
@@ -71,147 +73,9 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         add_med.setOnClickListener {
             progressDialog.loading()
-
-            AppExecutorsClient.handlerDelayed({
-                progressDialog.generalError()
-                AppExecutorsClient.handlerDelayed({ progressDialog.dismiss() }, 1000)
-            }, 5000)
+            postMedicationAction()
         }
 
-    }
-
-
-    private fun capturePhoto() {
-        val capturedImage =
-            File(requireActivity().applicationContext.externalCacheDir, "My_Captured_Photo.jpg")
-        if (capturedImage.exists()) {
-            capturedImage.delete()
-        }
-        capturedImage.createNewFile()
-        mUri = if (Build.VERSION.SDK_INT >= 24) {
-            requireActivity().applicationContext.let {
-                FileProvider.getUriForFile(
-                    it, "com.dawa.user.fileprovider",
-                    capturedImage
-                )
-            }
-        } else {
-            Uri.fromFile(capturedImage)
-        }
-
-        val intent = Intent("android.media.action.IMAGE_CAPTURE")
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)
-        startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
-    }
-
-    private fun openGallery() {
-        val intent = Intent("android.intent.action.GET_CONTENT")
-        intent.type = "image/*"
-        startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
-    }
-
-    private fun renderImage(imagePath: String?) {
-        if (imagePath != null) {
-            val bitmap = BitmapFactory.decodeFile(imagePath)
-            profile_picture?.setImageBitmap(bitmap)
-        }
-
-    }
-
-
-    private fun getImagePath(uri: Uri?, selection: String?): String {
-        var path: String? = null
-        val cursor = uri?.let {
-            requireActivity().applicationContext.contentResolver.query(
-                it,
-                null,
-                selection,
-                null,
-                null
-            )
-        }
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-                imagePath = path
-            }
-            cursor.close()
-        }
-        return path!!
-    }
-
-    @TargetApi(19)
-    private fun handleImageOnKitkat(data: Intent?) {
-        var imagePath: String? = null
-        val uri = data!!.data
-        //DocumentsContract defines the contract between a documents provider and the platform.
-        if (DocumentsContract.isDocumentUri(requireActivity().applicationContext, uri)) {
-            val docId = DocumentsContract.getDocumentId(uri)
-            if (uri != null) {
-                if ("com.android.providers.media.documents" == uri.authority) {
-                    val id = docId.split(":")[1]
-                    val selection = MediaStore.Images.Media._ID + "=" + id
-                    imagePath = getImagePath(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        selection
-                    )
-                } else if ("com.android.providers.downloads.documents" == uri.authority) {
-                    val contentUri = ContentUris.withAppendedId(
-                        Uri.parse(
-                            "content://downloads/public_downloads"
-                        ), java.lang.Long.valueOf(docId)
-                    )
-                    imagePath = getImagePath(contentUri, null)
-                }
-            }
-        } else if (uri != null) {
-            if ("content".equals(uri.scheme, ignoreCase = true)) {
-                imagePath = getImagePath(uri, null)
-            } else if ("file".equals(uri.scheme, ignoreCase = true)) {
-                imagePath = uri.path
-            }
-        }
-        this.imagePath = imagePath
-        renderImage(imagePath)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>
-        , grantedResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantedResults)
-        when (requestCode) {
-            1 ->
-                if (grantedResults.isNotEmpty() && grantedResults[0] ==
-                    PackageManager.PERMISSION_GRANTED
-                ) {
-                    openGallery()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.permission_Denied),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            OPERATION_CAPTURE_PHOTO ->
-                if (resultCode == Activity.RESULT_OK) {
-                    val bitmap = BitmapFactory.decodeStream(
-                        mUri?.let {
-                            requireActivity().applicationContext.contentResolver.openInputStream(it)
-                        })
-                    profile_picture!!.setImageBitmap(bitmap)
-                }
-            OPERATION_CHOOSE_PHOTO ->
-                if (resultCode == Activity.RESULT_OK) {
-                    handleImageOnKitkat(data)
-                }
-        }
     }
 
     private fun showPictureDialog() {
@@ -220,33 +84,46 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
             "Select photo from gallery",
             "Capture photo from camera"
         )
-        pictureDialog.setItems(pictureDialogItems) { dialog, which ->
+        pictureDialog.setItems(pictureDialogItems) { _, which ->
             when (which) {
                 0 -> {
-                    val checkSelfPermission = context?.let {
-                        ContextCompat.checkSelfPermission(
-                            it,
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        )
-                    }
-                    if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
-                        requireActivity().let {
-                            ActivityCompat.requestPermissions(
-                                it,
-                                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
-                            )
-                        }
-
-                    } else {
-                        openGallery()
-                    }
+                    takePhotoService.openGallery()
                 }
-                1 -> capturePhoto()
+                1 -> {
+                    imageUri = takePhotoService.capturePhoto()
+                }
             }
         }
         pictureDialog.show()
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            OPERATION_CAPTURE_PHOTO ->
+                if (resultCode == Activity.RESULT_OK) {
+                    multiPartFile =
+                        takePhotoService.resultForImageCapture(imageUri, medication_image)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Something went wrong take chose photo again",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            OPERATION_CHOOSE_PHOTO ->
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    multiPartFile = takePhotoService.resultForImageGallery(data, medication_image)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Something went wrong please chose photo again",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
+    }
 
     private fun loadCategories() {
         RetrofitClient
@@ -254,13 +131,13 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
             .listMedicationsCategories()
             .onErrorReturn { mutableListOf() }
             .doOnRequest {
-                AppExecutorsClient.mainThread().execute {
+                AppExecutorsService.mainThread().execute {
                     progressDialog.loading()
                 }
             }.subscribeOn(Schedulers.io())
             .observeOn(Schedulers.newThread())
             .subscribe {
-                AppExecutorsClient.mainThread().execute {
+                AppExecutorsService.mainThread().execute {
                     progressDialog.dismiss()
                     if (it.isNotEmpty()) {
                         categoryList = it
@@ -287,7 +164,60 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         selectedCategoryId = categoryList[position].id
         Log.d("AddMed", "selected is $selectedCategoryId")
+    }
 
+    private fun isNotValidData(): Boolean {
+        return (medicationName.text.isBlank() || address.text.isBlank() || selectedCategoryId == 0)
+    }
+
+
+    private fun postMedicationAction() {
+
+        if (isNotValidData()) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.fill_field_please),
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val userData = PreferenceManagerService.retrieveUserData()
+        val medicationCreationForm =
+            MedicationCreationForm(
+                medicationName.text.toString(),
+                address.text.toString(),
+                0.0,
+                0.0,
+                selectedCategoryId,
+                userData.id
+            )
+
+        RetrofitClient
+            .INSTANCE
+            .addMedication(multiPartFile, medicationCreationForm)
+            .onErrorReturn {
+                it.printStackTrace()
+                ResponseWrapper(false, getString(R.string.general_error), null)
+            }
+            .doOnRequest {
+                AppExecutorsService.mainThread().execute {
+                    progressDialog.loading()
+                }
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.newThread())
+            .subscribe {
+                AppExecutorsService.mainThread().execute {
+                    progressDialog.show(it.message)
+                    if (it.success) {
+                        progressDialog.dismiss()
+                    } else {
+                        progressDialog.generalError()
+                    }
+                }
+
+            }
     }
 
 }

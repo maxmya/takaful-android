@@ -42,6 +42,7 @@
     <string name="add_medication">إضافه الدواء</string>
     <string name="category">الفئه</string>
     <string name="address">العنوان</string>
+    <string name="pres">حجز</string>
 
 
 </resources>

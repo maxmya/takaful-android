@@ -86,6 +86,15 @@ data class MedicationsMock(
 )
 
 
+data class MedicationCreationForm(
+    val name: String,
+    val address: String,
+    val lang: Double,
+    val lat: Double,
+    val categoryId: Int,
+    val userId: Int
+)
+
 data class MedicationsDTO(
     val id: Int,
     val name: String,

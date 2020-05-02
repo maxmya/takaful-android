@@ -23,9 +23,21 @@
         <action
             android:id="@+id/to_post"
             app:destination="@id/addMedicationFragment" />
+        <action
+            android:id="@+id/toDetails"
+            app:destination="@id/medicationDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMedicationFragment"
         android:name="com.dawa.user.ui.fragments.AddMedicationFragment"
         android:label="اضافه دواء" />
+    <fragment
+        android:id="@+id/medicationDetailsFragment"
+        android:name="com.dawa.user.ui.fragments.MedicationDetailsFragment"
+        android:label="تفاصيل الدواء" >
+        <argument
+            android:name="medicationId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

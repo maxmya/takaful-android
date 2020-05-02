@@ -3,7 +3,6 @@ package com.dawa.user.ui.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,8 @@ import com.dawa.user.network.data.UserTokenRequest
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.HomeActivity
 import com.dawa.user.ui.dialogs.MessageProgressDialog
-import com.dawa.user.handlers.AppExecutorsClient
-import com.dawa.user.handlers.PreferenceManger
+import com.dawa.user.handlers.AppExecutorsService
+import com.dawa.user.handlers.PreferenceManagerService
 import com.dawa.user.network.data.ResponseWrapper
 import com.dawa.user.utils.StringUtils
 import io.reactivex.schedulers.Schedulers
@@ -63,7 +62,7 @@ class LoginFragment : Fragment() {
             if (loginRequest != null) {
                 fieldPhone.setText(loginRequest.username)
                 fieldPassword.setText(loginRequest.password)
-                AppExecutorsClient.handlerDelayed({
+                AppExecutorsService.handlerDelayed({
                     progressDialog.loading()
                     loginByNetworkCall(loginRequest)
                 }, 1000)
@@ -120,30 +119,31 @@ class LoginFragment : Fragment() {
                 }
             }
             .doOnRequest {
-                AppExecutorsClient.mainThread().execute {
+                AppExecutorsService.mainThread().execute {
                     progressDialog.loading()
                 }
             }
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.newThread())
             .subscribe {
-                AppExecutorsClient.mainThread().execute {
+                AppExecutorsService.mainThread().execute {
                     val userData: UserProfileResponse? = it.data
                     if (!it.success || userData == null) {
                         progressDialog.generalError()
-                        AppExecutorsClient.handlerDelayed({
+                        AppExecutorsService.handlerDelayed({
                             progressDialog.dismiss()
                         }, 2000)
                     } else {
-                        PreferenceManger.saveToken(userData.token)
-                        PreferenceManger.saveUserData(
+                        PreferenceManagerService.saveToken(userData.token)
+                        PreferenceManagerService.saveUserData(
                             UserData(
+                                userData.id,
                                 userData.phone,
                                 userData.fullName,
                                 userData.pictureUrl
                             )
                         )
-                        AppExecutorsClient.handlerDelayed({
+                        AppExecutorsService.handlerDelayed({
                             val intent = Intent(requireActivity(), HomeActivity::class.java)
                             progressDialog.dismiss()
                             startActivity(intent)
