@@ -17,7 +17,7 @@ interface DawaAPIService {
     fun loginUser(@Body tokenRequest: UserTokenRequest): Flowable<ResponseWrapper<UserProfileResponse>>
 
     @GET("medication/list")
-    fun listMedications(@Query("page") page: String): Flowable<Pageable<MedicationsDTO>>
+    fun listMedications(@Query("q") query: String?, @Query("size") size: String, @Query("page") page: String): Flowable<Pageable<MedicationsDTO>>
 
     @GET("medication/list/{id}")
     fun listMedicationDetails(@Path("id") id: Int): Flowable<MedicationsDTO>

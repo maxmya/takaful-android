@@ -19,6 +19,7 @@ class HomeMedicationsAdapter : RecyclerView.Adapter<HomeMedicationsViewHolder>()
     private val medicationsList = mutableListOf<MedicationsDTO>()
 
     fun add(listOfMedication: List<MedicationsDTO>) {
+        medicationsList.clear()
         medicationsList.addAll(listOfMedication)
         notifyDataSetChanged()
     }
