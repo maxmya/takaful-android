@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dawa.user.R
 import com.dawa.user.handlers.AppExecutorsService
@@ -89,14 +90,22 @@ class MedicationDetailsFragment : Fragment() {
                     if (it.success) {
                         AppExecutorsService.handlerDelayed({
                             progressDialog.dismiss()
-                            ErrorClass(true, getString(R.string.reserved))
+                            Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.reserved),
+                                    Toast.LENGTH_LONG
+                            ).show()
                         }, 1000)
                     } else {
                         reserveButton.isEnabled = true
                         AppExecutorsService.handlerDelayed({
                             progressDialog.dismiss()
                             if(it.message == "alreadyPreserved"){
-                                ErrorClass(false, getString(R.string.alreadyPreserved))
+                                Toast.makeText(
+                                        requireContext(),
+                                        getString(R.string.alreadyPreserved),
+                                        Toast.LENGTH_LONG
+                                ).show()
                             }
                         }, 3000)
                     }
