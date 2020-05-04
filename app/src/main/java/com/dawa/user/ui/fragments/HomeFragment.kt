@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
                     if(query.isEmpty()) {
                         getListOfMedications(page.toString(), null)
                     }else{
-                        getListOfMedications(null, query)
+                        getListOfMedications("", query)
                     }
                 }
                 super.onScrolled(recyclerView, dx, dy)
@@ -59,7 +59,11 @@ class HomeFragment : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                getListOfMedications(page.toString(),query)
+                if(query.isEmpty()) {
+                    getListOfMedications(page.toString(), null)
+                }else{
+                    getListOfMedications("", query)
+                }
                 return true
             }
 
@@ -84,7 +88,7 @@ class HomeFragment : Fragment() {
                     } else {
                         page= it.pagination!!.currentPage
                         hasMore = it.next
-                        medicationsAdapter.add(it.pageAbleList)
+                        medicationsAdapter.add(it.pageAbleList,query)
                     }
                     AppExecutorsService.handlerDelayed({
                         progressDialog.dismiss()
