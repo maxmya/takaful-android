@@ -45,6 +45,8 @@
     <string name="pres">حجز</string>
     <string name="reserved">تم حجز الدواء بنجاح</string>
     <string name="alreadyPreserved">الدواء محجوز بالفعل , الرجاء اختيار دواء اخر</string>
+    <string name="facebook_app_id">876166342858313</string>
+    <string name="fb_login_protocol_scheme">fb876166342858313</string>
 
 
 

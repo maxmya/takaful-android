@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "325554050105",
+    "firebase_url": "https://dawa-c9bc9.firebaseio.com",
+    "project_id": "dawa-c9bc9",
+    "storage_bucket": "dawa-c9bc9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325554050105:android:e51036588d1b91f0b829e8",
+        "android_client_info": {
+          "package_name": "com.dawa.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "325554050105-4cj7ph0nbrhkjj47raktr2ruh3rbsr6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIP0rIgRUUx6-Dyqqn9l78owFRiCrSJKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "325554050105-4cj7ph0nbrhkjj47raktr2ruh3rbsr6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
