@@ -22,9 +22,11 @@ import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_login.*
 import kotlinx.android.synthetic.main.layout_login.fieldPassword
@@ -35,7 +37,6 @@ import kotlinx.android.synthetic.main.layout_registration.*
 class LoginFragment : Fragment() {
     private var callbackManager: CallbackManager? = null
     private var firebaseAuth: FirebaseAuth? = null
-    private var isLoggedIn: Boolean = false
     lateinit var progressDialog: MessageProgressDialog
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -62,15 +63,13 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val accessToken = AccessToken.getCurrentAccessToken()
-        isLoggedIn = accessToken != null && !accessToken.isExpired
         setupUi()
-
+       /* facebook_sign_out_button.setOnClickListener {
+            signOut()
+        }*/
         //check if user already logged in and token not expired
-        if(isLoggedIn || firebaseAuth?.currentUser !=null){
-            val intent = Intent(requireActivity(), HomeActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+        if(firebaseAuth?.currentUser !=null){
+            userAlreadyLoggedIn()
         }
         firebaseAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
@@ -80,17 +79,15 @@ class LoginFragment : Fragment() {
         facebook_sign_in_button.registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
-                        // App code
                         handleFacebookAccessToken(loginResult.accessToken);
 
                     }
 
                     override fun onCancel() {
-                        // App code
+
                     }
 
                     override fun onError(exception: FacebookException) {
-                        // App code
                     }
                 })
         requireArguments().let {
@@ -118,7 +115,11 @@ class LoginFragment : Fragment() {
         }
     }
 
-
+private fun userAlreadyLoggedIn(){
+    val intent = Intent(requireActivity(), HomeActivity::class.java)
+    startActivity(intent)
+    requireActivity().finish()
+}
     private fun isValidFields(): Boolean {
 
 
@@ -196,6 +197,7 @@ class LoginFragment : Fragment() {
                     val user = firebaseAuth!!.currentUser
                     var phoneNumber=""
                     if(user!=null) {
+//                        updateUI(user)
                         if(user.phoneNumber!=null){
                             phoneNumber= user.phoneNumber!!
                         }else{
@@ -204,13 +206,12 @@ class LoginFragment : Fragment() {
                         val userRequestBody =
                             UserTokenRequest(
                                     phoneNumber,
-                                    token.token
+                                    user.uid
                             )
-                        println("signInWithCredential:user.uid"+user.uid)
 
                         if(user.uid!= firebaseAuth!!.uid) {
                             val accountRequest = UserRegisterRequest(phoneNumber,
-                                    token.token,
+                                    user.uid,
                                     phoneNumber,
                                     user.displayName.toString(),
                                     user.photoUrl.toString())
@@ -224,6 +225,7 @@ class LoginFragment : Fragment() {
                     println( "signInWithCredential:failure")
                     Toast.makeText(this.context, "Authentication failed.",
                             Toast.LENGTH_SHORT).show()
+//                    updateUI(null)
                 }
             }
     }
@@ -271,4 +273,20 @@ class LoginFragment : Fragment() {
 
 
     }
+
+    private fun signOut() {
+        firebaseAuth?.signOut()
+        LoginManager.getInstance().logOut()
+//        updateUI(null)
+    }
+
+    /*private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            facebook_sign_in_button.visibility = View.GONE
+            facebook_sign_out_button.visibility = View.VISIBLE
+        } else {
+            facebook_sign_in_button.visibility = View.VISIBLE
+            facebook_sign_out_button.visibility = View.GONE
+        }
+    }*/
 }
