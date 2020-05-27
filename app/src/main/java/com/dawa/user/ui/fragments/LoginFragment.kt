@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
 import com.dawa.user.R
 import com.dawa.user.data.UserData
@@ -16,7 +15,6 @@ import com.dawa.user.handlers.AppExecutorsService
 import com.dawa.user.handlers.PreferenceManagerService
 import com.dawa.user.network.data.ResponseWrapper
 import com.dawa.user.network.data.UserProfileResponse
-import com.dawa.user.network.data.UserRegisterRequest
 import com.dawa.user.network.data.UserTokenRequest
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.HomeActivity
@@ -33,18 +31,16 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_login.*
 import kotlinx.android.synthetic.main.layout_login.fieldPassword
 import kotlinx.android.synthetic.main.layout_login.fieldPhone
-import kotlinx.android.synthetic.main.layout_registration.*
 
 
 class LoginFragment : Fragment() {
     private var callbackManager: CallbackManager? = null
     private var firebaseAuth: FirebaseAuth? = null
+    private var isLoggedIn: Boolean? = false
     lateinit var progressDialog: MessageProgressDialog
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_login, container, false)
     }
 
@@ -67,29 +63,30 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val accessToken = AccessToken.getCurrentAccessToken()
+        isLoggedIn = accessToken != null && !accessToken.isExpired
         setupUi()
         firebaseAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
         facebook_sign_in_button.setPermissions("email")
         facebook_sign_in_button.fragment = this
 
-        facebook_sign_in_button.registerCallback(callbackManager, object :
-            FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-                // App code
-                handleFacebookAccessToken(loginResult.accessToken);
+        facebook_sign_in_button.registerCallback(callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(loginResult: LoginResult) {
+                        // App code
+                        handleFacebookAccessToken(loginResult.accessToken);
 
-            }
+                    }
 
-            override fun onCancel() {
-                // App code
-            }
+                    override fun onCancel() {
+                        // App code
+                    }
 
-            override fun onError(exception: FacebookException) {
-                // App code
-            }
-        })
+                    override fun onError(exception: FacebookException) {
+                        // App code
+                    }
+                })
         requireArguments().let {
             val loginRequest = LoginFragmentArgs.fromBundle(it).userRequest
             if (loginRequest != null) {
@@ -101,14 +98,9 @@ class LoginFragment : Fragment() {
                 }, 1000)
             } else {
                 btnLogin.setOnClickListener {
-                    if (!isValidFields())
-                        return@setOnClickListener
-                    loginByNetworkCall(
-                        UserTokenRequest(
-                            StringUtils.getUnmaskedPhone(fieldPhone),
-                            fieldPassword.text.toString()
-                        )
-                    )
+                    if (!isValidFields()) return@setOnClickListener
+                    loginByNetworkCall(UserTokenRequest(StringUtils.getUnmaskedPhone(fieldPhone),
+                            fieldPassword.text.toString()))
                 }
             }
         }
@@ -138,7 +130,6 @@ class LoginFragment : Fragment() {
 
         return true
     }
-
 
     private fun loginByNetworkCall(tokenRequest: UserTokenRequest) {
         RetrofitClient
@@ -188,7 +179,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
-        println("u:$token")
+        println("faceBook token :$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         firebaseAuth!!.signInWithCredential(credential)
@@ -204,18 +195,13 @@ class LoginFragment : Fragment() {
                         }else{
                             phoneNumber= user.email.toString()
                         }
-                        val accountRequest =
-                            UserRegisterRequest(
+                        val userRequestBody =
+                            UserTokenRequest(
                                     phoneNumber,
-                                    token.toString(),
-                                    phoneNumber,
-                                    user.displayName!!,
-                                    user.photoUrl?.path.toString()
+                                    token.toString()
                             )
-                        val fm: FragmentManager? = fragmentManager
-                        val fragm: RegistrationFragment =
-                            fm?.findFragmentById(R.id.registration) as RegistrationFragment
-                        fragm.makeRegisterWithNetworkCall(accountRequest)
+
+                        loginByNetworkCall(userRequestBody)
                     }
                 } else {
                     // If sign in fails, display a message to the user.
