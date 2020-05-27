@@ -13,9 +13,7 @@ import com.dawa.user.R
 import com.dawa.user.data.UserData
 import com.dawa.user.handlers.AppExecutorsService
 import com.dawa.user.handlers.PreferenceManagerService
-import com.dawa.user.network.data.ResponseWrapper
-import com.dawa.user.network.data.UserProfileResponse
-import com.dawa.user.network.data.UserTokenRequest
+import com.dawa.user.network.data.*
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.HomeActivity
 import com.dawa.user.ui.dialogs.MessageProgressDialog
@@ -31,12 +29,13 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_login.*
 import kotlinx.android.synthetic.main.layout_login.fieldPassword
 import kotlinx.android.synthetic.main.layout_login.fieldPhone
+import kotlinx.android.synthetic.main.layout_registration.*
 
 
 class LoginFragment : Fragment() {
     private var callbackManager: CallbackManager? = null
     private var firebaseAuth: FirebaseAuth? = null
-    private var isLoggedIn: Boolean? = false
+    private var isLoggedIn: Boolean = false
     lateinit var progressDialog: MessageProgressDialog
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -66,6 +65,13 @@ class LoginFragment : Fragment() {
         val accessToken = AccessToken.getCurrentAccessToken()
         isLoggedIn = accessToken != null && !accessToken.isExpired
         setupUi()
+
+        //check if user already logged in and token not expired
+        if(isLoggedIn || firebaseAuth?.currentUser !=null){
+            val intent = Intent(requireActivity(), HomeActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
         firebaseAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
         facebook_sign_in_button.setPermissions("email")
@@ -198,10 +204,20 @@ class LoginFragment : Fragment() {
                         val userRequestBody =
                             UserTokenRequest(
                                     phoneNumber,
-                                    token.toString()
+                                    token.token
                             )
+                        println("signInWithCredential:user.uid"+user.uid)
 
-                        loginByNetworkCall(userRequestBody)
+                        if(user.uid!= firebaseAuth!!.uid) {
+                            val accountRequest = UserRegisterRequest(phoneNumber,
+                                    token.token,
+                                    phoneNumber,
+                                    user.displayName.toString(),
+                                    user.photoUrl.toString())
+                            makeRegisterWithNetworkCall(accountRequest)
+                        }else{
+                            loginByNetworkCall(userRequestBody)
+                        }
                     }
                 } else {
                     // If sign in fails, display a message to the user.
@@ -211,9 +227,48 @@ class LoginFragment : Fragment() {
                 }
             }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager!!.onActivityResult(requestCode, resultCode, data)
+
+    }
+
+    private fun makeRegisterWithNetworkCall(accountRequest: UserRegisterRequest) {
+        val userRequestBody =
+            UserTokenRequest(
+                    accountRequest.username,
+                    accountRequest.password
+            )
+        RetrofitClient
+            .INSTANCE
+            .registerUser(accountRequest)
+            .onErrorReturn {
+                UserRegisterResponse(false, getString(R.string.general_error))
+            }
+            .doOnRequest {
+                AppExecutorsService.mainThread().execute {
+                    progressDialog.loading()
+                }
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.newThread())
+            .subscribe {
+                AppExecutorsService.mainThread().execute {
+                    progressDialog.show(it.message)
+                    if (it.success) {
+                        AppExecutorsService.handlerDelayed({
+                            progressDialog.dismiss()
+                            loginByNetworkCall(userRequestBody)
+                        }, 1000)
+                    } else {
+                        AppExecutorsService.handlerDelayed({
+                            progressDialog.dismiss()
+                        }, 3000)
+                    }
+                }
+            }
+
 
     }
 }
