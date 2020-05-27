@@ -1,6 +1,5 @@
 package com.dawa.user.ui.fragments
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.text.style.ClickableSpan
@@ -9,21 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
 import com.dawa.user.R
 import com.dawa.user.data.UserData
+import com.dawa.user.handlers.AppExecutorsService
+import com.dawa.user.handlers.PreferenceManagerService
+import com.dawa.user.network.data.ResponseWrapper
 import com.dawa.user.network.data.UserProfileResponse
+import com.dawa.user.network.data.UserRegisterRequest
 import com.dawa.user.network.data.UserTokenRequest
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.HomeActivity
 import com.dawa.user.ui.dialogs.MessageProgressDialog
-import com.dawa.user.handlers.AppExecutorsService
-import com.dawa.user.handlers.PreferenceManagerService
-import com.dawa.user.network.data.ResponseWrapper
 import com.dawa.user.utils.StringUtils
-import com.facebook.*
-import com.facebook.FacebookSdk.getApplicationContext
-import com.facebook.appevents.AppEventsLogger
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -31,9 +33,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_login.*
 import kotlinx.android.synthetic.main.layout_login.fieldPassword
 import kotlinx.android.synthetic.main.layout_login.fieldPhone
-import okhttp3.internal.concurrent.TaskRunner.Companion.logger
-import java.math.BigDecimal
-import java.util.*
+import kotlinx.android.synthetic.main.layout_registration.*
+
 
 class LoginFragment : Fragment() {
     private var callbackManager: CallbackManager? = null
@@ -78,6 +79,7 @@ class LoginFragment : Fragment() {
             override fun onSuccess(loginResult: LoginResult) {
                 // App code
                 handleFacebookAccessToken(loginResult.accessToken);
+
             }
 
             override fun onCancel() {
@@ -186,7 +188,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
-        println("handleFacebookAccessToken:$token")
+        println("u:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         firebaseAuth!!.signInWithCredential(credential)
@@ -195,9 +197,26 @@ class LoginFragment : Fragment() {
                     // Sign in success, update UI with the signed-in user's information
                     println("signInWithCredential:success")
                     val user = firebaseAuth!!.currentUser
-                    val intent = Intent(requireActivity(), HomeActivity::class.java)
-                    requireActivity().startActivity(intent)
-                    requireActivity().finish()
+                    var phoneNumber=""
+                    if(user!=null) {
+                        if(user.phoneNumber!=null){
+                            phoneNumber= user.phoneNumber!!
+                        }else{
+                            phoneNumber= user.email.toString()
+                        }
+                        val accountRequest =
+                            UserRegisterRequest(
+                                    phoneNumber,
+                                    token.toString(),
+                                    phoneNumber,
+                                    user.displayName!!,
+                                    user.photoUrl?.path.toString()
+                            )
+                        val fm: FragmentManager? = fragmentManager
+                        val fragm: RegistrationFragment =
+                            fm?.findFragmentById(R.id.registration) as RegistrationFragment
+                        fragm.makeRegisterWithNetworkCall(accountRequest)
+                    }
                 } else {
                     // If sign in fails, display a message to the user.
                     println( "signInWithCredential:failure")

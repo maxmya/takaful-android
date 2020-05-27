@@ -145,7 +145,7 @@ class RegistrationFragment : Fragment() {
     }
 
 
-    private fun makeRegisterWithNetworkCall(accountRequest: UserRegisterRequest) {
+    fun makeRegisterWithNetworkCall(accountRequest: UserRegisterRequest) {
 
         RetrofitClient
             .INSTANCE
