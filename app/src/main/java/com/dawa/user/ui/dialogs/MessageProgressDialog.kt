@@ -48,8 +48,7 @@ class MessageProgressDialog(private var activity: Activity) {
     }
 
     private fun changeMessage(newMessage: String?) {
-        if (dialog.isShowing)
-            messageView.text = newMessage
+        if (dialog.isShowing) messageView.text = newMessage
     }
 
 
