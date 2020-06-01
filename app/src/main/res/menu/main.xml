@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/account_off"
+        android:title="" />
+
+    <item
+        android:id="@+id/destination_books"
+        android:icon="@drawable/suggestion_off"
+        android:title="" />
+
+    <item
+        android:id="@+id/addMedicationFragment"
+        android:title="" />
+
+    <item
+        android:id="@+id/notification"
+        android:icon="@drawable/notification_off"
+        android:title="" />
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/home_active"
+        android:title="" />
+
+
+</menu>

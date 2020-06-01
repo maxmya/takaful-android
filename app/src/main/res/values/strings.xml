@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Takaful</string>
+    <string name="app_name">Dawa</string>
     <string name="login_to_existing_account">Login To Existing Account</string>
     <string name="register_a_new_account">ليس لدي حساب , إنشاء حساب</string>
     <string name="create_account">إنشاء حساب</string>
@@ -18,9 +18,37 @@
     <string name="valid_password_length">من فضلك ادخل كلمه مرور بحد ادني
         6
         رموز</string>
-    <string name="phone_number_regex">01[0|1|2|5][0-9]{8}</string>
-    <string name="phone_hint">010 000-00-000</string>
     <string name="loading">جاري التحميل</string>
     <string name="general_error">حدث خطأما من فضلك حاول مره اخرى</string>
-    <string name="full_name_regex">[A-Za-z ]+</string>
+
+
+    <string name="full_name_regex" translatable="false">[A-Za-z ]+</string>
+    <string name="phone_number_regex" translatable="false">01[0|1|2|5][0-9]{8}</string>
+    <string name="phone_hint" translatable="false">010 000-00-000</string>
+
+    <string name="account">الحساب</string>
+    <string name="save_Changes">حفظ التغيرات</string>
+    <string name="logout_btn">تسجيل خروج</string>
+    <string name="my_medications">ادويتي</string>
+    <string name="search">ابحث</string>
+    <string name="permission_Denied">طلب الاذن مرفوض</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="medication_name">أسم الدواء</string>
+    <string name="add_image">اضف صوره للدواء</string>
+    <string name="add_medication">إضافه الدواء</string>
+    <string name="category">الفئه</string>
+    <string name="address">العنوان</string>
+    <string name="pres">حجز</string>
+    <string name="reserved">تم حجز الدواء بنجاح</string>
+    <string name="alreadyPreserved">الدواء محجوز بالفعل , الرجاء اختيار دواء اخر</string>
+    <string name="facebook_app_id">876166342858313</string>
+    <string name="fb_login_protocol_scheme">fb876166342858313</string>
+    <string name="code">Code</string>
+    <string name="verify">Verify</string>
+
+
 </resources>
