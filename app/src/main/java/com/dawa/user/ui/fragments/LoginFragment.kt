@@ -73,7 +73,7 @@ class LoginFragment : Fragment() {
         }
         firebaseAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
-        facebook_sign_in_button.setPermissions("email")
+        facebook_sign_in_button.setPermissions("email","public_profile")
         facebook_sign_in_button.fragment = this
 
         facebook_sign_in_button.registerCallback(callbackManager,
@@ -88,6 +88,7 @@ class LoginFragment : Fragment() {
                     }
 
                     override fun onError(exception: FacebookException) {
+                        println("facebookExc: "+exception.message)
                     }
                 })
         requireArguments().let {
@@ -209,16 +210,17 @@ private fun userAlreadyLoggedIn(){
                                     user.uid
                             )
 
-                        if(user.uid!= firebaseAuth!!.uid) {
+//                        if(user.uid!= firebaseAuth!!.uid) {
+
                             val accountRequest = UserRegisterRequest(phoneNumber,
                                     user.uid,
                                     phoneNumber,
                                     user.displayName.toString(),
                                     user.photoUrl.toString())
                             makeRegisterWithNetworkCall(accountRequest)
-                        }else{
-                            loginByNetworkCall(userRequestBody)
-                        }
+//                        }else{
+//                            loginByNetworkCall(userRequestBody)
+//                        }
                     }
                 } else {
                     // If sign in fails, display a message to the user.
