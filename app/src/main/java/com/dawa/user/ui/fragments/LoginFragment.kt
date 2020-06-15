@@ -35,9 +35,12 @@ import kotlinx.android.synthetic.main.layout_registration.*
 
 
 class LoginFragment : Fragment() {
+
     private var callbackManager: CallbackManager? = null
     private var firebaseAuth: FirebaseAuth? = null
     lateinit var progressDialog: MessageProgressDialog
+
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -64,11 +67,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
-       /* facebook_sign_out_button.setOnClickListener {
-            signOut()
-        }*/
+        /* facebook_sign_out_button.setOnClickListener {
+             signOut()
+         }*/
         //check if user already logged in and token not expired
-        if(firebaseAuth?.currentUser !=null){
+        if (firebaseAuth?.currentUser != null) {
             userAlreadyLoggedIn()
         }
         firebaseAuth = FirebaseAuth.getInstance()
@@ -115,11 +118,12 @@ class LoginFragment : Fragment() {
         }
     }
 
-private fun userAlreadyLoggedIn(){
-    val intent = Intent(requireActivity(), HomeActivity::class.java)
-    startActivity(intent)
-    requireActivity().finish()
-}
+    private fun userAlreadyLoggedIn() {
+        val intent = Intent(requireActivity(), HomeActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     private fun isValidFields(): Boolean {
 
 
@@ -139,24 +143,17 @@ private fun userAlreadyLoggedIn(){
     }
 
     private fun loginByNetworkCall(tokenRequest: UserTokenRequest) {
-        RetrofitClient
-            .INSTANCE
-            .loginUser(tokenRequest)
-            .onErrorReturn {
+        RetrofitClient.INSTANCE.loginUser(tokenRequest).onErrorReturn {
                 if (it.message != null) {
                     ResponseWrapper(false, it.message!!, null)
                 } else {
                     ResponseWrapper(false, "error occurred", null)
                 }
-            }
-            .doOnRequest {
+            }.doOnRequest {
                 AppExecutorsService.mainThread().execute {
                     progressDialog.loading()
                 }
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.newThread())
-            .subscribe {
+            }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
                 AppExecutorsService.mainThread().execute {
                     val userData: UserProfileResponse? = it.data
                     if (!it.success || userData == null) {
@@ -166,14 +163,10 @@ private fun userAlreadyLoggedIn(){
                         }, 2000)
                     } else {
                         PreferenceManagerService.saveToken(userData.token)
-                        PreferenceManagerService.saveUserData(
-                            UserData(
-                                userData.id,
+                        PreferenceManagerService.saveUserData(UserData(userData.id,
                                 userData.phone,
                                 userData.fullName,
-                                userData.pictureUrl
-                            )
-                        )
+                                userData.pictureUrl))
                         AppExecutorsService.handlerDelayed({
                             val intent = Intent(requireActivity(), HomeActivity::class.java)
                             progressDialog.dismiss()
@@ -195,36 +188,32 @@ private fun userAlreadyLoggedIn(){
                     // Sign in success, update UI with the signed-in user's information
                     println("signInWithCredential:success")
                     val user = firebaseAuth!!.currentUser
-                    var phoneNumber=""
-                    if(user!=null) {
+                    var phoneNumber = ""
+                    if (user != null) {
 //                        updateUI(user)
-                        if(user.phoneNumber!=null){
-                            phoneNumber= user.phoneNumber!!
-                        }else{
-                            phoneNumber= user.email.toString()
+                        if (user.phoneNumber != null) {
+                            phoneNumber = user.phoneNumber!!
+                        } else {
+                            phoneNumber = user.email.toString()
                         }
-                        val userRequestBody =
-                            UserTokenRequest(
-                                    phoneNumber,
-                                    user.uid
-                            )
+                        val userRequestBody = UserTokenRequest(phoneNumber, user.uid)
 
-                        if(user.uid!= firebaseAuth!!.uid) {
+                        if (user.uid != firebaseAuth!!.uid) {
                             val accountRequest = UserRegisterRequest(phoneNumber,
                                     user.uid,
                                     phoneNumber,
                                     user.displayName.toString(),
                                     user.photoUrl.toString())
                             makeRegisterWithNetworkCall(accountRequest)
-                        }else{
+                        } else {
                             loginByNetworkCall(userRequestBody)
                         }
                     }
                 } else {
                     // If sign in fails, display a message to the user.
-                    println( "signInWithCredential:failure")
-                    Toast.makeText(this.context, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
+                    println("signInWithCredential:failure")
+                    Toast.makeText(this.context, "Authentication failed.", Toast.LENGTH_SHORT)
+                        .show()
 //                    updateUI(null)
                 }
             }
@@ -237,25 +226,14 @@ private fun userAlreadyLoggedIn(){
     }
 
     private fun makeRegisterWithNetworkCall(accountRequest: UserRegisterRequest) {
-        val userRequestBody =
-            UserTokenRequest(
-                    accountRequest.username,
-                    accountRequest.password
-            )
-        RetrofitClient
-            .INSTANCE
-            .registerUser(accountRequest)
-            .onErrorReturn {
+        val userRequestBody = UserTokenRequest(accountRequest.username, accountRequest.password)
+        RetrofitClient.INSTANCE.registerUser(accountRequest).onErrorReturn {
                 UserRegisterResponse(false, getString(R.string.general_error))
-            }
-            .doOnRequest {
+            }.doOnRequest {
                 AppExecutorsService.mainThread().execute {
                     progressDialog.loading()
                 }
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.newThread())
-            .subscribe {
+            }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
                 AppExecutorsService.mainThread().execute {
                     progressDialog.show(it.message)
                     if (it.success) {

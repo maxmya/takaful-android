@@ -29,22 +29,13 @@ class TakePhotoService constructor(val fragment: Fragment, val context: Context)
     fun openGallery() {
         val intent = Intent("android.intent.action.GET_CONTENT")
         intent.type = "image/*"
-        fragment.startActivityForResult(
-            intent,
-            OPERATION_CHOOSE_PHOTO
-        )
+        fragment.startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
     }
 
 
     fun resultForImageGallery(imageIntent: Intent, imageView: ImageView): MultipartBody.Part {
         val imageURI = imageIntent.data
-        Picasso
-            .get()
-            .load(imageURI)
-            .fit()
-            .centerCrop()
-            .placeholder(R.drawable.logo)
-            .into(imageView)
+        Picasso.get().load(imageURI).fit().centerCrop().placeholder(R.drawable.logo).into(imageView)
         return getImageAsMultiPart(imageURI!!)
     }
 
@@ -62,22 +53,13 @@ class TakePhotoService constructor(val fragment: Fragment, val context: Context)
         }
         val intent = Intent("android.media.action.IMAGE_CAPTURE")
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI)
-        fragment.startActivityForResult(
-            intent,
-            OPERATION_CAPTURE_PHOTO
-        )
+        fragment.startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
         return imageURI
     }
 
 
     fun resultForImageCapture(imageURI: Uri, imageView: ImageView): MultipartBody.Part {
-        Picasso
-            .get()
-            .load(imageURI)
-            .fit()
-            .centerCrop()
-            .placeholder(R.drawable.logo)
-            .into(imageView)
+        Picasso.get().load(imageURI).fit().centerCrop().placeholder(R.drawable.logo).into(imageView)
         return getImageAsMultiPart(imageURI)
     }
 

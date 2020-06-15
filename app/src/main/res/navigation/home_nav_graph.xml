@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph.xml"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/profileFragment"
@@ -30,7 +32,11 @@
     <fragment
         android:id="@+id/addMedicationFragment"
         android:name="com.dawa.user.ui.fragments.AddMedicationFragment"
-        android:label="اضافه دواء" />
+        android:label="اضافه دواء" >
+        <action
+            android:id="@+id/toMap"
+            app:destination="@id/mapFragment" />
+    </fragment>
     <fragment
         android:id="@+id/medicationDetailsFragment"
         android:name="com.dawa.user.ui.fragments.MedicationDetailsFragment"
@@ -39,5 +45,17 @@
             android:name="medicationId"
             app:argType="integer"
             android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.dawa.user.ui.fragments.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <argument
+            android:name="lat_lng_location"
+            app:argType="float[]" />
+        <action
+            android:id="@+id/action_mapFragment_to_addMedicationFragment"
+            app:destination="@id/addMedicationFragment" />
     </fragment>
 </navigation>
