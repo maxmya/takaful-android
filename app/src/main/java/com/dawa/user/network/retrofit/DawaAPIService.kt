@@ -36,4 +36,10 @@ interface DawaAPIService {
     fun changeUserProfile(@Part("body") body: ChangeProfileRequest,
                           @Part file: MultipartBody.Part?): Flowable<ErrorClass>
 
+    @GET("user/auth/preservation")
+    fun listUserPreservations(): Flowable<ResponseWrapper<List<UserPreservationDTO>>>
+
+    @POST("user/auth/preservation/{id}")
+    fun deletePreservation(@Path("id") id: Int): Flowable<ErrorClass>
+
 }
