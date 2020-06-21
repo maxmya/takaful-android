@@ -13,7 +13,7 @@ class AuthCodeDialog(private var activity: Activity,
                      private var autCodeCallBack: RegistrationFragment.AuthCodeFromDialog) {
 
     private val alert: AlertDialog.Builder =
-        AlertDialog.Builder(activity, R.style.MProgressDialogStyle)
+        AlertDialog.Builder(activity, R.style.DawaDialogStyle)
 
     private var codeView: TextInputEditText
     private var dialog: AlertDialog

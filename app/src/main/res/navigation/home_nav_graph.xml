@@ -28,6 +28,9 @@
         <action
             android:id="@+id/toDetails"
             app:destination="@id/medicationDetailsFragment" />
+        <action
+            android:id="@+id/toMyMedications"
+            app:destination="@id/myMedicationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMedicationFragment"
@@ -58,4 +61,8 @@
             android:id="@+id/action_mapFragment_to_addMedicationFragment"
             app:destination="@id/addMedicationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/myMedicationsFragment"
+        android:name="com.dawa.user.ui.fragments.MyMedicationsFragment"
+        android:label="MyMedicationsFragment" />
 </navigation>

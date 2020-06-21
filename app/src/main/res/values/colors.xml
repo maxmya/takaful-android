@@ -6,4 +6,7 @@
     <color name="grayBackground">#F5F5F5</color>
     <color name="gradStart">#258C7F</color>
     <color name="gradEnd">#34B88F</color>
+
+    <color name="rejection">#F37576</color>
+    <color name="acceptance">#34B88F</color>
 </resources>

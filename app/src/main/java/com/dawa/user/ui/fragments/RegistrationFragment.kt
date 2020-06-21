@@ -1,5 +1,6 @@
 package com.dawa.user.ui.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.text.style.ClickableSpan
 import android.util.Log
@@ -140,12 +141,13 @@ class RegistrationFragment : Fragment() {
 
             val phoneForFirebase = "+2${getUnmaskedPhone(fieldPhone)}"
             Log.d(TAG, "registerAction: phone is $phoneForFirebase")
+
             PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneForFirebase,
                     60,
                     TimeUnit.SECONDS,
                     requireActivity(),
                     verificationCallback)
-
+//            callMakeRequestWithBuilder()
             progressDialog.show("جاري التحقق من رقم الهاتف")
         }
     }

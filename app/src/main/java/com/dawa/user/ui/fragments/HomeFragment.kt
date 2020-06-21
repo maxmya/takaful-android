@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dawa.user.R
@@ -41,15 +42,15 @@ class HomeFragment : Fragment() {
         val gridLayout = GridLayoutManager(requireActivity(), 2)
         medications_list.layoutManager = gridLayout
         medications_list.adapter = medicationsAdapter
-        val query=searchView.query!!.toString()
-        getListOfMedications(page.toString(),null)
+        val query = searchView.query!!.toString()
+        getListOfMedications(page.toString(), null)
         medications_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (gridLayout.findLastVisibleItemPosition() == gridLayout.itemCount - 1 && hasMore) {
                     page++
-                    if(query.isEmpty()) {
+                    if (query.isEmpty()) {
                         getListOfMedications(page.toString(), null)
-                    }else{
+                    } else {
                         getListOfMedications("", query)
                     }
                 }
@@ -59,9 +60,9 @@ class HomeFragment : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                if(query.isEmpty()) {
+                if (query.isEmpty()) {
                     getListOfMedications(page.toString(), null)
-                }else{
+                } else {
                     getListOfMedications("", query)
                 }
                 return true
@@ -71,30 +72,36 @@ class HomeFragment : Fragment() {
                 return false
             }
         })
+
+        my_medications.setOnClickListener {
+            val toMyMedications = HomeFragmentDirections.toMyMedications()
+            Navigation.findNavController(it).navigate(toMyMedications)
+        }
+
     }
 
 
     private fun getListOfMedications(pageNumber: String?, query: String?) {
-        RetrofitClient.INSTANCE.listMedications(query,"20",pageNumber.toString()).onErrorReturn {
+        RetrofitClient.INSTANCE.listMedications(query, "20", pageNumber.toString()).onErrorReturn {
             Pageable()
         }.doOnRequest {
             AppExecutorsService.mainThread().execute {
                 progressDialog.loading()
             }
         }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
-                AppExecutorsService.mainThread().execute {
-                    if (it.pagination == null) {
-                        progressDialog.generalError()
-                    } else {
-                        page= it.pagination!!.currentPage
-                        hasMore = it.next
-                        medicationsAdapter.add(it.pageAbleList,query)
-                    }
-                    AppExecutorsService.handlerDelayed({
-                        progressDialog.dismiss()
-                    }, 1000)
+            AppExecutorsService.mainThread().execute {
+                if (it.pagination == null) {
+                    progressDialog.generalError()
+                } else {
+                    page = it.pagination!!.currentPage
+                    hasMore = it.next
+                    medicationsAdapter.add(it.pageAbleList, query)
                 }
+                AppExecutorsService.handlerDelayed({
+                    progressDialog.dismiss()
+                }, 1000)
             }
+        }
     }
 
 }

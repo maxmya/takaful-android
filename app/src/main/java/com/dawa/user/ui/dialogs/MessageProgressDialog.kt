@@ -4,7 +4,6 @@ import android.app.Activity
 import android.view.View
 
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.dawa.user.R
 
@@ -12,7 +11,7 @@ import com.dawa.user.R
 class MessageProgressDialog(private var activity: Activity) {
 
     private val alert: AlertDialog.Builder =
-        AlertDialog.Builder(activity, R.style.MProgressDialogStyle)
+        AlertDialog.Builder(activity, R.style.DawaDialogStyle)
     private var messageView: TextView
     private var dialog: AlertDialog
 
