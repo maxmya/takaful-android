@@ -3,21 +3,14 @@ package com.dawa.user.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListAdapter
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import com.dawa.user.R
-import com.dawa.user.network.data.MedicationsDTO
 import com.dawa.user.network.data.UserPreservationDTO
-import com.dawa.user.ui.fragments.HomeFragmentDirections
-import com.dawa.user.ui.fragments.MedicationDetailsFragment
-import kotlinx.android.synthetic.main.layout_item_midication.view.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_item_midication.view.linearLayout4
 import kotlinx.android.synthetic.main.layout_item_midication.view.medication_location_short
 import kotlinx.android.synthetic.main.layout_item_midication.view.medication_name
 import kotlinx.android.synthetic.main.layout_item_preservation.view.*
-import okhttp3.internal.immutableListOf
 
 
 class PreservationAdapter : RecyclerView.Adapter<PreservationViewHolder>() {
@@ -26,7 +19,7 @@ class PreservationAdapter : RecyclerView.Adapter<PreservationViewHolder>() {
 
     fun add(listOfUserPreservation: List<UserPreservationDTO>) {
         preservationList.addAll(listOfUserPreservation)
-//        notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PreservationViewHolder {

@@ -67,6 +67,7 @@ class HomeActivity : AppCompatActivity() {
                 navController.navigate(R.id.myNotificationListFragment)
             }
             2 -> {
+                navController.navigate(R.id.preservationsFragment)
 
             }
             3 -> {
@@ -80,10 +81,4 @@ class HomeActivity : AppCompatActivity() {
         return NavigationUI.navigateUp(navController, null)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId==R.id.profileFragment){
-            navController.navigate(R.id.preservationsFragment)
-        }
-        return super.onOptionsItemSelected(item)
-    }
 }
