@@ -44,12 +44,15 @@ interface DawaAPIService {
     @GET("medication/list/mine")
     fun listMyMedications(): Flowable<ResponseWrapper<List<MedicationsDTO>>>
 
-    @DELETE("mine/{id}/delete")
+    @DELETE("medication/mine/{id}/delete")
     fun deleteMyMedication(@Path("id") id: Int): Flowable<ResponseWrapper<Any>>
 
-    @GET("mine/{id}/preserver")
+    @GET("medication/mine/{id}/preserver")
     fun getMyMedicationPreserver(@Path("id") id: Int): Flowable<ResponseWrapper<MedicineUserDTO>>
 
+
+    @GET("notifications/list/{userId}")
+    fun getAllNotifications(@Path("userId") userId: Int): Flowable<ResponseWrapper<List<NotificationDTO>>>
 
     @GET("user/auth/preservation")
     fun listUserPreservations(): Flowable<ResponseWrapper<List<UserPreservationDTO>>>

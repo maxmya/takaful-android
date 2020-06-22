@@ -77,8 +77,10 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.github.tntkhang:full-screen-image-view-library:1.1.0'
+    implementation 'com.github.himangipatel:ImagesPreview:0.0.5'
 
+    implementation 'com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:0.6.0'
+    implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
 
     //networking
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'

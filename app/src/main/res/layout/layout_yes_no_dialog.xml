@@ -18,39 +18,48 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_15sdp"
             android:fontFamily="@font/sans_plain"
-            android:textSize="@dimen/_15ssp"
+            android:textSize="@dimen/_12ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="سؤال هنا للتجربه ؟" />
 
 
-        <Button
-            android:id="@+id/yes"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:backgroundTint="@color/acceptance"
-            android:fontFamily="@font/sans_plain"
-            android:text="@string/yes"
-            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/message"
-            app:layout_constraintTop_toBottomOf="@+id/message" />
+            app:layout_constraintTop_toBottomOf="@+id/message">
 
-        <Button
-            android:id="@+id/no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:backgroundTint="@color/rejection"
-            android:fontFamily="@font/sans_plain"
-            android:text="@string/no"
-            app:layout_constraintBottom_toBottomOf="@+id/yes"
-            app:layout_constraintEnd_toStartOf="@+id/yes"
-            app:layout_constraintStart_toStartOf="@+id/message"
-            app:layout_constraintTop_toTopOf="@+id/yes" />
+
+            <Button
+                android:layout_margin="@dimen/_10sdp"
+                android:id="@+id/no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rejection"
+                android:fontFamily="@font/sans_plain"
+                android:text="@string/no"
+                android:textSize="@dimen/_10ssp" />
+
+            <Button
+                android:layout_margin="@dimen/_10sdp"
+
+                android:id="@+id/yes"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/acceptance"
+                android:fontFamily="@font/sans_plain"
+                android:text="@string/yes"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_10ssp" />
+
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

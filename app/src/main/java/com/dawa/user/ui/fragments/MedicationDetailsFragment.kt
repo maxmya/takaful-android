@@ -1,6 +1,7 @@
 package com.dawa.user.ui.fragments
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,8 @@ import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.dialogs.MessageProgressDialog
 import com.dawa.user.ui.dialogs.YesNoDialog
 import com.dawa.user.ui.dialogs.YesNoFlow
-import com.github.tntkhang.fullscreenimageview.library.FullScreenImageViewActivity
+import com.himangi.imagepreview.ImagePreviewActivity
+import com.himangi.imagepreview.PreviewFile
 import com.squareup.picasso.Picasso
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_medication_details.*
@@ -25,15 +27,16 @@ class MedicationDetailsFragment : Fragment() {
 
     private lateinit var progressDialog: MessageProgressDialog
     private lateinit var yesNoDialog: YesNoDialog
+    private var medicationId: Int = 0
 
     private val yesNoFlow = object : YesNoFlow {
 
         override fun yes() {
-            Toast.makeText(requireContext(), "Yes", Toast.LENGTH_SHORT).show()
+            reserveMedicineWithNetworkCall(medicationId)
         }
 
         override fun no() {
-            Toast.makeText(requireContext(), "No", Toast.LENGTH_SHORT).show()
+
         }
 
     }
@@ -52,11 +55,10 @@ class MedicationDetailsFragment : Fragment() {
         yesNoDialog = YesNoDialog(requireActivity(), yesNoFlow)
 
         requireArguments().let {
-            val medicationId = MedicationDetailsFragmentArgs.fromBundle(it).medicationId
+            medicationId = MedicationDetailsFragmentArgs.fromBundle(it).medicationId
             loadMedicationDetails(medicationId)
             reserveButton.setOnClickListener {
-                yesNoDialog.show("هل انت متاكد ايها الاحمق")
-//                reserveMedicineWithNetworkCall(medicationId)
+                yesNoDialog.show("هل انت متاكد من حجز هذا الدواء ؟")
             }
         }
     }
@@ -77,21 +79,18 @@ class MedicationDetailsFragment : Fragment() {
                     Picasso.get().load(it.imageUrl).fit().centerCrop()
                         .placeholder(R.drawable.medication).into(medication_image_det)
 
-                    val imageUrlArr = arrayListOf<String>(it.imageUrl)
+                    val previewFiles: ArrayList<PreviewFile> = ArrayList()
+                    previewFiles.add(PreviewFile(it.imageUrl, ""))
+
                     medication_image_det.setOnClickListener {
-
-                        val fullImageIntent =
-                            Intent(requireActivity(), FullScreenImageViewActivity::class.java)
-                        fullImageIntent.putExtra(FullScreenImageViewActivity.URI_LIST_DATA,
-                                imageUrlArr)
-                        fullImageIntent.putExtra(FullScreenImageViewActivity.IMAGE_FULL_SCREEN_CURRENT_POS,
-                                0)
-                        startActivity(fullImageIntent)
-
+                        val intent = Intent(requireActivity(), ImagePreviewActivity::class.java)
+                        intent.putExtra(ImagePreviewActivity.IMAGE_LIST, previewFiles)
+                        startActivity(intent)
                     }
 
                     medicationName.text = it.name
                     personName.text = it.userDTO!!.fullName
+                    phone.text = it.userDTO.phone
                     address.text = it.addressTitle
 
                 }
@@ -111,17 +110,20 @@ class MedicationDetailsFragment : Fragment() {
             }
         }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
             AppExecutorsService.mainThread().execute {
+                progressDialog.dismiss()
                 if (it.success) {
                     AppExecutorsService.handlerDelayed({
-                        progressDialog.dismiss()
                         Toast.makeText(requireContext(),
                                 getString(R.string.reserved),
                                 Toast.LENGTH_LONG).show()
+
+                        phone.visibility = View.VISIBLE
+                        phone_point.visibility = View.VISIBLE
+
                     }, 1000)
                 } else {
                     reserveButton.isEnabled = true
                     AppExecutorsService.handlerDelayed({
-                        progressDialog.dismiss()
                         if (it.message == "alreadyPreserved") {
                             Toast.makeText(requireContext(),
                                     getString(R.string.alreadyPreserved),

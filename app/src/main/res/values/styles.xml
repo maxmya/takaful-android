@@ -16,4 +16,10 @@
     </style>
 
 
+    <style name="AppTheme.ToolbarFont" parent="AppTheme">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/_15ssp</item>
+        <item name="android:fontFamily">@font/sans_plain</item>
+    </style>
+
 </resources>
