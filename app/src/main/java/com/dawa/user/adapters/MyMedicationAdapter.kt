@@ -1,5 +1,7 @@
 package com.dawa.user.adapters
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +12,15 @@ import com.dawa.user.network.data.MedicationsDTO
 import com.dawa.user.network.data.ResponseWrapper
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.dialogs.MessageProgressDialog
+import com.himangi.imagepreview.ImagePreviewActivity
+import com.himangi.imagepreview.PreviewFile
 import com.squareup.picasso.Picasso
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.layout_medication_details.*
 import kotlinx.android.synthetic.main.layout_my_medication.view.*
 
-class MyMedicationAdapter constructor(val progressDialog: MessageProgressDialog) :
+class MyMedicationAdapter constructor(val progressDialog: MessageProgressDialog,
+                                      val activity: Activity) :
     RecyclerView.Adapter<MyMedicationViewHolder>() {
 
 
@@ -39,8 +45,18 @@ class MyMedicationAdapter constructor(val progressDialog: MessageProgressDialog)
 
         val medication = medicationsList[position]
 
-        Picasso.get().load(medication.imageUrl).placeholder(R.drawable.medication)
-            .into(holder.itemView.image)
+        Picasso.get().load(medication.imageUrl).fit().centerCrop()
+            .placeholder(R.drawable.medication).fit().centerCrop().into(holder.itemView.image)
+
+        val previewFiles: ArrayList<PreviewFile> = ArrayList()
+        previewFiles.add(PreviewFile(medication.imageUrl, ""))
+
+        holder.itemView.image.setOnClickListener {
+            val intent = Intent(activity, ImagePreviewActivity::class.java)
+            intent.putExtra(ImagePreviewActivity.IMAGE_LIST, previewFiles)
+            activity.startActivity(intent)
+        }
+
 
         holder.itemView.name.text = medication.name
         holder.itemView.address.text = medication.addressTitle
@@ -51,11 +67,12 @@ class MyMedicationAdapter constructor(val progressDialog: MessageProgressDialog)
 
             }
         } else {
-            holder.itemView.preserved.visibility = View.GONE
+            holder.itemView.preserved.visibility = View.INVISIBLE
         }
 
         holder.itemView.delete.setOnClickListener {
             RetrofitClient.INSTANCE.deleteMyMedication(medication.id).onErrorReturn {
+                it.printStackTrace()
                 if (it.message != null) {
                     ResponseWrapper(false, it.message!!, null)
                 } else {

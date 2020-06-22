@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/addMedicationFragment"
         android:name="com.dawa.user.ui.fragments.AddMedicationFragment"
-        android:label="اضافه دواء" >
+        android:label="إضافه دواء" >
         <action
             android:id="@+id/toMap"
             app:destination="@id/mapFragment" />
@@ -52,7 +52,7 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.dawa.user.ui.fragments.MapFragment"
-        android:label="fragment_map"
+        android:label="موقعي"
         tools:layout="@layout/fragment_map" >
         <argument
             android:name="lat_lng_location"
@@ -64,5 +64,9 @@
     <fragment
         android:id="@+id/myMedicationsFragment"
         android:name="com.dawa.user.ui.fragments.MyMedicationsFragment"
-        android:label="MyMedicationsFragment" />
+        android:label="أدويتي" />
+    <fragment
+        android:id="@+id/myNotificationListFragment"
+        android:name="com.dawa.user.ui.fragments.MyNotificationListFragment"
+        android:label="قائمه الإشعارات" />
 </navigation>

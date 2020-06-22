@@ -15,7 +15,7 @@
         android:title="" />
 
     <item
-        android:id="@+id/notification"
+        android:id="@+id/myNotificationListFragment"
         android:icon="@drawable/notification_off"
         android:title="" />
     <item

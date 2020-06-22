@@ -35,7 +35,7 @@ class MyMedicationsFragment : Fragment() {
     }
 
     private fun setupList() {
-        myMedicationAdapter = MyMedicationAdapter(progressDialog)
+        myMedicationAdapter = MyMedicationAdapter(progressDialog,requireActivity())
         my_medications_list.adapter = myMedicationAdapter
         my_medications_list.layoutManager = LinearLayoutManager(requireContext())
 
