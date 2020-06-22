@@ -54,7 +54,7 @@ interface DawaAPIService {
     @GET("user/auth/preservation")
     fun listUserPreservations(): Flowable<ResponseWrapper<List<UserPreservationDTO>>>
 
-    @POST("user/auth/preservation/{id}")
+    @DELETE("user/auth/preservation/{id}")
     fun deletePreservation(@Path("id") id: Int): Flowable<ErrorClass>
 
 }
