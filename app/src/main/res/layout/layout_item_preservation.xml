@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/_300sdp"
-    android:layout_height="@dimen/_140sdp"
+    android:layout_height="@dimen/_160sdp"
     android:layout_margin="@dimen/_5sdp"
     android:backgroundTint="@color/grayBackground"
     android:clickable="true"
@@ -13,17 +13,18 @@
     app:cardElevation="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:id="@+id/draggerId"
+        android:layout_width="390dp"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/_1sdp">
+        android:layout_marginHorizontal="@dimen/_1sdp"
+        android:gravity="center">
 
 
         <ImageView
-            android:id="@+id/linearLayout4"
-            android:layout_width="@dimen/_120sdp"
-            android:layout_height="@dimen/_70sdp"
+            android:id="@+id/medImage"
+            android:layout_width="154dp"
+            android:layout_height="135dp"
             android:layout_margin="@dimen/_5sdp"
-
             android:scaleType="centerCrop"
             android:src="@drawable/medication"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +35,7 @@
             app:layout_constraintVertical_bias="0.175" />
 
         <TextView
-            android:id="@+id/medication_name"
+            android:id="@+id/preserve_medication_name"
             android:layout_width="176dp"
             android:layout_height="30dp"
             android:layout_margin="@dimen/_15sdp"
@@ -44,14 +45,14 @@
             android:textSize="@dimen/_11sdp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout4"
+            app:layout_constraintStart_toEndOf="@+id/medImage"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="اسم الدواء" />
 
         <TextView
-            android:id="@+id/medication_location_short"
+            android:id="@+id/preserve_medication_location_short"
             android:layout_width="176dp"
-            android:layout_height="30dp"
+            android:layout_height="50dp"
             android:layout_marginStart="18dp"
             android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/sans_plain"
@@ -59,9 +60,10 @@
             android:textSize="@dimen/_9sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout4"
-            app:layout_constraintTop_toBottomOf="@+id/medication_name"
+            app:layout_constraintStart_toEndOf="@+id/medImage"
+            app:layout_constraintTop_toBottomOf="@+id/preserve_medication_name"
             tools:text="الموقع" />
+
         <TextView
             android:id="@+id/medicationUserPhoneNumber"
             android:layout_width="176dp"
@@ -73,10 +75,24 @@
             android:textSize="@dimen/_9sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout4"
-            app:layout_constraintTop_toBottomOf="@+id/medication_location_short"
+            app:layout_constraintStart_toEndOf="@+id/medImage"
+            app:layout_constraintTop_toBottomOf="@+id/preserve_medication_location_short"
             tools:text="رقم هاتف صاحب الدواء" />
 
+        <ImageView
+            android:id="@+id/deletePreserve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:layout_marginTop="19dp"
+            android:src="@drawable/ic_baseline_delete_24_red"
+            android:translationZ="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.885"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/medicationUserPhoneNumber"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

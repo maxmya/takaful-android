@@ -50,5 +50,9 @@
     <string name="code">Code</string>
     <string name="verify">Verify</string>
     <string name="preservation">حجوزاتي</string>
+    <string name="deletePreserved">تم مسح حجز الدواء بنجاح</string>
+    <string name="NoPreservation">لا يوجد حجوزات</string>
+
+
 
 </resources>
