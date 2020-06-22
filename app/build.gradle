@@ -82,6 +82,8 @@ dependencies {
     implementation 'com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:0.6.0'
     implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
 
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
+
     //networking
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'

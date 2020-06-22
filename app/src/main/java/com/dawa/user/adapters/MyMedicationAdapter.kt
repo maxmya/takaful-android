@@ -5,13 +5,16 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.dawa.user.R
 import com.dawa.user.handlers.AppExecutorsService
 import com.dawa.user.network.data.MedicationsDTO
 import com.dawa.user.network.data.ResponseWrapper
 import com.dawa.user.network.retrofit.RetrofitClient
+import com.dawa.user.ui.dialogs.DialogUser
 import com.dawa.user.ui.dialogs.MessageProgressDialog
+import com.dawa.user.ui.dialogs.PreserverInfoDialog
 import com.himangi.imagepreview.ImagePreviewActivity
 import com.himangi.imagepreview.PreviewFile
 import com.squareup.picasso.Picasso
@@ -64,7 +67,27 @@ class MyMedicationAdapter constructor(val progressDialog: MessageProgressDialog,
         if (medication.preserver != null) {
             holder.itemView.preserved.visibility = View.VISIBLE
             holder.itemView.preserved.setOnClickListener {
-
+                RetrofitClient.INSTANCE.getMyMedicationPreserver(medication.id).onErrorReturn {
+                    it.printStackTrace()
+                    ResponseWrapper(false, "error", null)
+                }.doOnRequest {
+                    AppExecutorsService.mainThread().execute {
+                        progressDialog.loading()
+                    }
+                }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
+                    AppExecutorsService.mainThread().execute {
+                        progressDialog.dismiss()
+                        if (it.success && it.data != null) {
+                            PreserverInfoDialog(activity).show(DialogUser(it.data.fullName,
+                                    it.data.phone,
+                                    it.data.pictureUrl))
+                        } else {
+                            Toast.makeText(activity,
+                                    "cannot get preserver info",
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
         } else {
             holder.itemView.preserved.visibility = View.INVISIBLE
