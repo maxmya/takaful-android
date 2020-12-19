@@ -16,7 +16,7 @@ class NotificationsListAdapter(dataSet: List<NotificationDTO> = emptyList()) :
 
     }
 
-    override fun getViewHolder(itemLayout: View) = ViewHolder(itemLayout)
+    override fun getViewHolder(itemView: View) = ViewHolder(itemView)
 
     override fun onBindViewHolder(item: NotificationDTO, viewHolder: ViewHolder, position: Int) {
 

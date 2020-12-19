@@ -140,3 +140,10 @@ data class ResponseWrapper<T>(
     val message: String,
     val data: T?
 )
+
+data class UserPreservationDTO(
+    val id: Int?,
+    val medicine: MedicationsDTO?,
+    val timestamp: Timestamp?
+
+)

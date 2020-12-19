@@ -54,4 +54,10 @@ interface DawaAPIService {
     @GET("notifications/list/{userId}")
     fun getAllNotifications(@Path("userId") userId: Int): Flowable<ResponseWrapper<List<NotificationDTO>>>
 
+    @GET("user/auth/preservation")
+    fun listUserPreservations(): Flowable<ResponseWrapper<List<UserPreservationDTO>>>
+
+    @DELETE("user/auth/preservation/{id}")
+    fun deletePreservation(@Path("id") id: Int): Flowable<ResponseWrapper<Any>>
+
 }

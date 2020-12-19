@@ -31,6 +31,9 @@
         <action
             android:id="@+id/toMyMedications"
             app:destination="@id/myMedicationsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_preservationsFragment"
+            app:destination="@id/preservationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMedicationFragment"
@@ -69,4 +72,9 @@
         android:id="@+id/myNotificationListFragment"
         android:name="com.dawa.user.ui.fragments.MyNotificationListFragment"
         android:label="قائمه الإشعارات" />
+    <fragment
+        android:id="@+id/preservationsFragment"
+        android:name="com.dawa.user.ui.fragments.PreservationsFragment"
+        android:label="@string/preservation" />
+
 </navigation>

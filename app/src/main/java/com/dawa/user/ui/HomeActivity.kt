@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -66,6 +67,7 @@ class HomeActivity : AppCompatActivity() {
                 navController.navigate(R.id.myNotificationListFragment)
             }
             2 -> {
+                navController.navigate(R.id.preservationsFragment)
 
             }
             3 -> {
@@ -78,4 +80,5 @@ class HomeActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, null)
     }
+
 }
