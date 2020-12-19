@@ -9,9 +9,7 @@ import com.squareup.picasso.Picasso
 import com.dawa.user.R
 import com.dawa.user.network.data.MedicationsDTO
 import com.dawa.user.ui.fragments.HomeFragmentDirections
-import com.dawa.user.ui.fragments.MedicationDetailsFragment
 import kotlinx.android.synthetic.main.layout_item_midication.view.*
-import okhttp3.internal.immutableListOf
 
 
 class HomeMedicationsAdapter : RecyclerView.Adapter<HomeMedicationsViewHolder>() {

@@ -1,50 +1,41 @@
 {
   "project_info": {
-    "project_number": "325554050105",
-    "firebase_url": "https://dawa-c9bc9.firebaseio.com",
-    "project_id": "dawa-c9bc9",
-    "storage_bucket": "dawa-c9bc9.appspot.com"
+    "project_number": "171512581178",
+    "project_id": "dawa-takaful-af683",
+    "storage_bucket": "dawa-takaful-af683.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:325554050105:android:e51036588d1b91f0b829e8",
+        "mobilesdk_app_id": "1:171512581178:android:d81d955f794a9aec433903",
         "android_client_info": {
           "package_name": "com.dawa.user"
         }
       },
       "oauth_client": [
         {
-          "client_id": "325554050105-8qj6n9gckbksqbrgnomq312q83lb2c59.apps.googleusercontent.com",
+          "client_id": "171512581178-te4lrnjf2l4h1b8389i7hbg9qv57ltbm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dawa.user",
-            "certificate_hash": "0ac6a6d9b6e01ac0d3da658fc83479ae0ef294b4"
+            "certificate_hash": "0c46aff5da96946e096b3edd6153582d7319c1ca"
           }
         },
         {
-          "client_id": "325554050105-qrlfo64l4ksn3jdgsnh017hqeu7k4qur.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.dawa.user",
-            "certificate_hash": "dad91f699f55928f52be63ddec7d981cf0216347"
-          }
-        },
-        {
-          "client_id": "325554050105-4cj7ph0nbrhkjj47raktr2ruh3rbsr6p.apps.googleusercontent.com",
+          "client_id": "171512581178-cnfc10k4r4dnf3a289g6kusc3je1htf8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBIP0rIgRUUx6-Dyqqn9l78owFRiCrSJKk"
+          "current_key": "AIzaSyAOVJs7wmWCwpRS5-M5LLedNM00u6nvUUc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "325554050105-4cj7ph0nbrhkjj47raktr2ruh3rbsr6p.apps.googleusercontent.com",
+              "client_id": "171512581178-cnfc10k4r4dnf3a289g6kusc3je1htf8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
