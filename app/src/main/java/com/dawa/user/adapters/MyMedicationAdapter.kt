@@ -19,7 +19,6 @@ import com.himangi.imagepreview.ImagePreviewActivity
 import com.himangi.imagepreview.PreviewFile
 import com.squareup.picasso.Picasso
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.layout_medication_details.*
 import kotlinx.android.synthetic.main.layout_my_medication.view.*
 
 class MyMedicationAdapter constructor(val progressDialog: MessageProgressDialog,

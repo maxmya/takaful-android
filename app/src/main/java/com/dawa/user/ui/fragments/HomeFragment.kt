@@ -1,10 +1,12 @@
 package com.dawa.user.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dawa.user.R
 import com.dawa.user.adapters.HomeMedicationsAdapter
 import com.dawa.user.handlers.AppExecutorsService
+import com.dawa.user.handlers.PreferenceManagerService
 import com.dawa.user.network.data.Pageable
 import com.dawa.user.network.retrofit.RetrofitClient
+import com.dawa.user.ui.HomeActivity
+import com.dawa.user.ui.UserActivity
 import com.dawa.user.ui.dialogs.MessageProgressDialog
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_home.*
@@ -37,6 +42,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressDialog = MessageProgressDialog(requireActivity())
+
+        if (PreferenceManagerService.retrieveToken().isEmpty()) {
+            signIn.visibility = View.VISIBLE
+            signIn.setOnClickListener {
+                val intent = Intent(requireContext(), UserActivity::class.java)
+                requireActivity().startActivity(intent)
+            }
+        } else {
+            signIn.visibility = View.GONE
+        }
 
         medicationsAdapter = HomeMedicationsAdapter()
         val gridLayout = GridLayoutManager(requireActivity(), 2)
@@ -74,8 +89,14 @@ class HomeFragment : Fragment() {
         })
 
         my_medications.setOnClickListener {
-            val toMyMedications = HomeFragmentDirections.toMyMedications()
-            Navigation.findNavController(it).navigate(toMyMedications)
+            if (PreferenceManagerService.retrieveToken().isEmpty()) {
+                Toast.makeText(requireContext(),
+                        "Please Register Account To Be Able To View Your Medications",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                val toMyMedications = HomeFragmentDirections.toMyMedications()
+                Navigation.findNavController(it).navigate(toMyMedications)
+            }
         }
 
     }

@@ -16,57 +16,41 @@ import com.dawa.user.R
 
 object StringUtils {
 
-        fun makeUrlColoredSpan(
-            sentence: String,
-            word: String,
-            textView: TextView,
-            clickableSpan: ClickableSpan) {
+    fun makeUrlColoredSpan(sentence: String,
+                           word: String,
+                           textView: TextView,
+                           clickableSpan: ClickableSpan) {
 
-            val builder = SpannableStringBuilder()
-            val startIndex = sentence.indexOf(word)
-            val endIndex = startIndex + word.length
-            val spannableString = SpannableString(sentence)
-            val boldSpan = StyleSpan(Typeface.BOLD_ITALIC)
+        val builder = SpannableStringBuilder()
+        val startIndex = sentence.indexOf(word)
+        val endIndex = startIndex + word.length
+        val spannableString = SpannableString(sentence)
+        val boldSpan = StyleSpan(Typeface.BOLD_ITALIC)
 
-            spannableString.setSpan(
-                boldSpan,
+        spannableString.setSpan(boldSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        spannableString.setSpan(clickableSpan,
                 startIndex,
                 endIndex,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-            spannableString.setSpan(
-                clickableSpan,
-                startIndex,
-                endIndex,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-            spannableString.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(textView.context, R.color.colorPrimary)),
-                startIndex,
-                endIndex,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(ForegroundColorSpan(ContextCompat.getColor(textView.context,
+                R.color.colorPrimary)), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
 
-            builder.append(spannableString)
-            textView.setText(builder, TextView.BufferType.SPANNABLE)
-            textView.movementMethod = LinkMovementMethod.getInstance()
-        }
+        builder.append(spannableString)
+        textView.setText(builder, TextView.BufferType.SPANNABLE)
+        textView.movementMethod = LinkMovementMethod.getInstance()
+    }
 
 
-        fun maskPhoneField(field: EditText) {
-            PhoneMaskManager()
-                .withMask("### ###-##-###")
-                .bindTo(field)
-        }
+    fun maskPhoneField(field: EditText) {
+        PhoneMaskManager().withMask("### ### ###-##-###").bindTo(field)
+    }
 
-        fun getUnmaskedPhone(fieldPhone: EditText): String {
-            return fieldPhone
-                .text
-                .toString()
-                .replace(" ", "")
-                .replace("-", "")
-                .trim()
-        }
+    fun getUnmaskedPhone(fieldPhone: EditText): String {
+        return fieldPhone.text.toString().replace(" ", "").replace("-", "").trim()
+    }
 
 
 }

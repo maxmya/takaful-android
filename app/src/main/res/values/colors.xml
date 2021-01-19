@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#317f87</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#4a4165</color>
+    <color name="colorPrimary">#EE4C59</color>
+    <color name="colorPrimaryDark">#4a4165</color>
+    <color name="colorAccent">#F37576</color>
     <color name="grayBackground">#F5F5F5</color>
-    <color name="gradStart">#258C7F</color>
-    <color name="gradEnd">#34B88F</color>
+    <color name="gradStart">#3B305C</color>
+    <color name="gradEnd">#F37576</color>
 
     <color name="rejection">#F37576</color>
-    <color name="acceptance">#34B88F</color>
+    <color name="acceptance">#0E8A64</color>
 </resources>

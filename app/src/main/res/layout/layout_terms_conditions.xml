@@ -13,28 +13,9 @@
         android:layout_margin="@dimen/_10sdp"
         android:fontFamily="@font/sans_plain"
         android:text="@string/terms_and_conditions_title"
-        android:textSize="@dimen/_30sdp"
+        android:textSize="@dimen/_20sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="@dimen/_300sdp"
-        android:layout_height="@dimen/_300sdp"
-        android:layout_marginTop="@dimen/_100sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/capture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="capture"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

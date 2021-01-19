@@ -1,6 +1,5 @@
 package com.dawa.user.ui.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.text.style.ClickableSpan
 import android.util.Log
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.dawa.user.App
 import com.dawa.user.R
 import com.dawa.user.network.data.UserRegisterRequest
 import com.dawa.user.network.data.UserRegisterResponse
@@ -58,9 +56,6 @@ class RegistrationFragment : Fragment() {
 
         StringUtils.maskPhoneField(fieldPhone)
 
-        back_to_login.setOnClickListener {
-            openLogin(it, null)
-        }
 
         val terms = getString(R.string.terms_conditions)
         val word = getString(R.string.terms_conditions_word)
@@ -110,17 +105,8 @@ class RegistrationFragment : Fragment() {
 
         if (fieldPhone.text.isEmpty()) {
             fieldPhone.requestFocus()
-            fieldPhone.error = getString(R.string.fill_field_please)
+            fieldPhone.error = getString(R.string.valid_field_please)
             return false
-        } else {
-            val isValidPhone = Pattern.compile(getString(R.string.phone_number_regex))
-                .matcher(getUnmaskedPhone(fieldPhone)).matches()
-
-            if (!isValidPhone) {
-                fieldPhone.requestFocus()
-                fieldPhone.error = getString(R.string.valid_field_please)
-                return false
-            }
         }
 
         return true
@@ -139,7 +125,7 @@ class RegistrationFragment : Fragment() {
 
             if (!isValidFields()) return@setOnClickListener
 
-            val phoneForFirebase = "+2${getUnmaskedPhone(fieldPhone)}"
+            val phoneForFirebase = getUnmaskedPhone(fieldPhone)
             Log.d(TAG, "registerAction: phone is $phoneForFirebase")
 
             PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneForFirebase,
@@ -147,7 +133,6 @@ class RegistrationFragment : Fragment() {
                     TimeUnit.SECONDS,
                     requireActivity(),
                     verificationCallback)
-//            callMakeRequestWithBuilder()
             progressDialog.show("جاري التحقق من رقم الهاتف")
         }
     }
@@ -201,7 +186,7 @@ class RegistrationFragment : Fragment() {
         }
 
 
-    interface AuthCodeFromDialog {
+    public interface AuthCodeFromDialog {
         fun authCode(code: String)
     }
 
@@ -248,7 +233,6 @@ class RegistrationFragment : Fragment() {
     private fun openLogin(view: View, userLoginData: UserTokenRequest?) {
         val toLogin = RegistrationFragmentDirections.toLogin(userLoginData)
         Navigation.findNavController(view).navigate(toLogin)
-
     }
 
 }

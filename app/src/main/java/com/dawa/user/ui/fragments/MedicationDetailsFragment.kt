@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dawa.user.R
 import com.dawa.user.handlers.AppExecutorsService
+import com.dawa.user.handlers.PreferenceManagerService
 import com.dawa.user.network.data.ErrorClass
 import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.dialogs.MessageProgressDialog
@@ -58,7 +59,11 @@ class MedicationDetailsFragment : Fragment() {
             medicationId = MedicationDetailsFragmentArgs.fromBundle(it).medicationId
             loadMedicationDetails(medicationId)
             reserveButton.setOnClickListener {
-                yesNoDialog.show("هل انت متاكد من حجز هذا الدواء ؟")
+                if (PreferenceManagerService.retrieveToken().isEmpty()) {
+                    Toast.makeText(requireContext(),
+                            "Please Register Account To Be Able To Preserve A Medication",
+                            Toast.LENGTH_LONG).show();
+                } else yesNoDialog.show("هل انت متاكد من حجز هذا الدواء ؟")
             }
         }
     }

@@ -67,33 +67,13 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
-        /* facebook_sign_out_button.setOnClickListener {
-             signOut()
-         }*/
-        //check if user already logged in and token not expired
+
         if (firebaseAuth?.currentUser != null) {
             userAlreadyLoggedIn()
         }
         firebaseAuth = FirebaseAuth.getInstance()
         callbackManager = CallbackManager.Factory.create()
-        facebook_sign_in_button.setPermissions("email","public_profile")
-        facebook_sign_in_button.fragment = this
 
-        facebook_sign_in_button.registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(loginResult: LoginResult) {
-                        handleFacebookAccessToken(loginResult.accessToken);
-
-                    }
-
-                    override fun onCancel() {
-
-                    }
-
-                    override fun onError(exception: FacebookException) {
-                        println("facebookExc: "+exception.message)
-                    }
-                })
         requireArguments().let {
             val loginRequest = LoginFragmentArgs.fromBundle(it).userRequest
             if (loginRequest != null) {
@@ -112,11 +92,11 @@ class LoginFragment : Fragment() {
             }
         }
 
-        textView3.setOnClickListener {
-            val intent = Intent(requireActivity(), HomeActivity::class.java)
-            requireActivity().startActivity(intent)
-            requireActivity().finish()
+        forgetPassword.setOnClickListener {
+            val toForgetPassword = LoginFragmentDirections.toForgetPassword()
+            Navigation.findNavController(forgetPassword).navigate(toForgetPassword)
         }
+
     }
 
     private fun userAlreadyLoggedIn() {
@@ -145,81 +125,40 @@ class LoginFragment : Fragment() {
 
     private fun loginByNetworkCall(tokenRequest: UserTokenRequest) {
         RetrofitClient.INSTANCE.loginUser(tokenRequest).onErrorReturn {
-                if (it.message != null) {
-                    ResponseWrapper(false, it.message!!, null)
+            if (it.message != null) {
+                ResponseWrapper(false, it.message!!, null)
+            } else {
+                ResponseWrapper(false, "error occurred", null)
+            }
+        }.doOnRequest {
+            AppExecutorsService.mainThread().execute {
+                progressDialog.loading()
+            }
+        }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
+            AppExecutorsService.mainThread().execute {
+                val userData: UserProfileResponse? = it.data
+                if (!it.success || userData == null) {
+                    progressDialog.generalError()
+                    AppExecutorsService.handlerDelayed({
+                        progressDialog.dismiss()
+                    }, 2000)
                 } else {
-                    ResponseWrapper(false, "error occurred", null)
-                }
-            }.doOnRequest {
-                AppExecutorsService.mainThread().execute {
-                    progressDialog.loading()
-                }
-            }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
-                AppExecutorsService.mainThread().execute {
-                    val userData: UserProfileResponse? = it.data
-                    if (!it.success || userData == null) {
-                        progressDialog.generalError()
-                        AppExecutorsService.handlerDelayed({
-                            progressDialog.dismiss()
-                        }, 2000)
-                    } else {
-                        PreferenceManagerService.saveToken(userData.token)
-                        PreferenceManagerService.saveUserData(UserData(userData.id,
-                                userData.phone,
-                                userData.fullName,
-                                userData.pictureUrl))
-                        AppExecutorsService.handlerDelayed({
-                            val intent = Intent(requireActivity(), HomeActivity::class.java)
-                            progressDialog.dismiss()
-                            startActivity(intent)
-                            requireActivity().finish()
-                        }, 1000)
-                    }
+                    PreferenceManagerService.saveToken(userData.token)
+                    PreferenceManagerService.saveUserData(UserData(userData.id,
+                            userData.phone,
+                            userData.fullName,
+                            userData.pictureUrl))
+                    AppExecutorsService.handlerDelayed({
+                        val intent = Intent(requireActivity(), HomeActivity::class.java)
+                        progressDialog.dismiss()
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }, 1000)
                 }
             }
+        }
     }
 
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        println("faceBook token :$token")
-
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        firebaseAuth!!.signInWithCredential(credential)
-            .addOnCompleteListener(this.requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    println("signInWithCredential:success")
-                    val user = firebaseAuth!!.currentUser
-                    var phoneNumber = ""
-                    if (user != null) {
-//                        updateUI(user)
-                        if (user.phoneNumber != null) {
-                            phoneNumber = user.phoneNumber!!
-                        } else {
-                            phoneNumber = user.email.toString()
-                        }
-                        val userRequestBody = UserTokenRequest(phoneNumber, user.uid)
-
-//                        if(user.uid!= firebaseAuth!!.uid) {
-
-                            val accountRequest = UserRegisterRequest(phoneNumber,
-                                    user.uid,
-                                    phoneNumber,
-                                    user.displayName.toString(),
-                                    user.photoUrl.toString())
-                            makeRegisterWithNetworkCall(accountRequest)
-//                        }else{
-//                            loginByNetworkCall(userRequestBody)
-//                        }
-                    }
-                } else {
-                    // If sign in fails, display a message to the user.
-                    println("signInWithCredential:failure")
-                    Toast.makeText(this.context, "Authentication failed.", Toast.LENGTH_SHORT)
-                        .show()
-//                    updateUI(null)
-                }
-            }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -227,46 +166,4 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun makeRegisterWithNetworkCall(accountRequest: UserRegisterRequest) {
-        val userRequestBody = UserTokenRequest(accountRequest.username, accountRequest.password)
-        RetrofitClient.INSTANCE.registerUser(accountRequest).onErrorReturn {
-                UserRegisterResponse(false, getString(R.string.general_error))
-            }.doOnRequest {
-                AppExecutorsService.mainThread().execute {
-                    progressDialog.loading()
-                }
-            }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
-                AppExecutorsService.mainThread().execute {
-                    progressDialog.show(it.message)
-                    if (it.success) {
-                        AppExecutorsService.handlerDelayed({
-                            progressDialog.dismiss()
-                            loginByNetworkCall(userRequestBody)
-                        }, 1000)
-                    } else {
-                        AppExecutorsService.handlerDelayed({
-                            progressDialog.dismiss()
-                        }, 3000)
-                    }
-                }
-            }
-
-
-    }
-
-    private fun signOut() {
-        firebaseAuth?.signOut()
-        LoginManager.getInstance().logOut()
-//        updateUI(null)
-    }
-
-    /*private fun updateUI(user: FirebaseUser?) {
-        if (user != null) {
-            facebook_sign_in_button.visibility = View.GONE
-            facebook_sign_out_button.visibility = View.VISIBLE
-        } else {
-            facebook_sign_in_button.visibility = View.VISIBLE
-            facebook_sign_out_button.visibility = View.GONE
-        }
-    }*/
 }

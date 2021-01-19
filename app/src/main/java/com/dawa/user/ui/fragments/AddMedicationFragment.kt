@@ -225,16 +225,15 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun isNotValidData(): Boolean {
-        return (medicationName.text.isBlank() || address.text.isBlank() || selectedCategoryId == 0)
+        return (medicationName.text.isBlank() || address.text.isBlank() || selectedCategoryId == 0 || multiPartFile == null)
     }
 
 
     private fun postMedicationAction() {
 
         if (isNotValidData()) {
-            Toast.makeText(requireContext(),
-                    getString(R.string.fill_field_please),
-                    Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Please Fill Missing Fields", Toast.LENGTH_LONG).show()
+            progressDialog.dismiss()
             return
         }
 

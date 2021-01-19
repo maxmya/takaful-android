@@ -1,11 +1,9 @@
 package com.dawa.user.ui
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -43,32 +41,49 @@ class HomeActivity : AppCompatActivity() {
 
         spaceNavigationView.setSpaceOnClickListener(object : SpaceOnClickListener {
             override fun onCentreButtonClick() {
-                navController.navigate(R.id.addMedicationFragment)
+                if (PreferenceManagerService.retrieveToken().isEmpty()) {
+                    Toast.makeText(this@HomeActivity,
+                            "Please Register Account To Be Able To Add Medication",
+                            Toast.LENGTH_LONG).show();
+                } else navController.navigate(R.id.addMedicationFragment)
             }
 
             override fun onItemReselected(itemIndex: Int, itemName: String?) {
-                selectWithNavbar(itemIndex)
+                selectWithNavBar(itemIndex)
             }
 
             override fun onItemClick(itemIndex: Int, itemName: String?) {
-                selectWithNavbar(itemIndex)
+                selectWithNavBar(itemIndex)
             }
 
         })
 
     }
 
-    private fun selectWithNavbar(itemIndex: Int) {
+    private fun selectWithNavBar(itemIndex: Int) {
         when (itemIndex) {
             0 -> {
-                navController.navigate(R.id.profileFragment)
+                if (PreferenceManagerService.retrieveToken().isEmpty()) {
+                    Toast.makeText(this,
+                            "Please Register Account To Be Able To View Profile",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    navController.navigate(R.id.profileFragment)
+                }
             }
             1 -> {
-                navController.navigate(R.id.myNotificationListFragment)
+                if (PreferenceManagerService.retrieveToken().isEmpty()) {
+                    Toast.makeText(this,
+                            "Please Register Account To Be Able To View Notifications",
+                            Toast.LENGTH_LONG).show();
+                } else navController.navigate(R.id.myNotificationListFragment)
             }
             2 -> {
-                navController.navigate(R.id.preservationsFragment)
-
+                if (PreferenceManagerService.retrieveToken().isEmpty()) {
+                    Toast.makeText(this,
+                            "Please Register Account To Be Able To View Presentations",
+                            Toast.LENGTH_LONG).show();
+                } else navController.navigate(R.id.preservationsFragment)
             }
             3 -> {
                 navController.navigate(R.id.homeFragment)

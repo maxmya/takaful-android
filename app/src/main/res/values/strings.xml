@@ -24,7 +24,7 @@
 
     <string name="full_name_regex" translatable="false">[A-Za-z ]+</string>
     <string name="phone_number_regex" translatable="false">01[0|1|2|5][0-9]{8}</string>
-    <string name="phone_hint" translatable="false">010 000-00-000</string>
+    <string name="phone_hint" translatable="false">00k 010 000-00-000</string>
 
     <string name="account">الحساب</string>
     <string name="save_Changes">حفظ التغيرات</string>

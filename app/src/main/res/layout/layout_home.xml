@@ -63,13 +63,26 @@
                 android:text="@string/my_medications"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintTop_toBottomOf="@+id/forgetPassword" />
 
 
         </LinearLayout>
 
 
     </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/signIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20sdp"
+        android:fontFamily="@font/sans_plain"
+        android:text="تسجيل الدخول"
+        android:visibility="gone"
+        app:icon="@drawable/account_on"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/medications_list"
@@ -83,5 +96,6 @@
         app:spanCount="2"
         tools:itemCount="10"
         tools:listitem="@layout/layout_item_midication" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

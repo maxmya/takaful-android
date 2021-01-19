@@ -18,6 +18,9 @@
             app:argType="com.dawa.user.network.data.UserTokenRequest"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/toForgetPassword"
+            app:destination="@id/forgetPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/registration"
@@ -36,4 +39,20 @@
         android:id="@+id/terms"
         android:name="com.dawa.user.ui.fragments.TermsAndConditionsFragment"
         android:label="TermsAndConditionsFragment" />
+    <fragment
+        android:id="@+id/forgetPasswordFragment"
+        android:name="com.dawa.user.ui.fragments.ForgetPasswordFragment"
+        android:label="ForgetPasswordFragment" >
+        <action
+            android:id="@+id/toResetPassword"
+            app:destination="@id/resetPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.dawa.user.ui.fragments.ResetPasswordFragment"
+        android:label="ResetPasswordFragment" >
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
+    </fragment>
 </navigation>

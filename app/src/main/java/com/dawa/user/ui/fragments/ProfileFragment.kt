@@ -38,11 +38,9 @@ class ProfileFragment : Fragment() {
     lateinit var imageUri: Uri
     private var multiPartFile: MultipartBody.Part? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_change_profile, container, false)
     }
 
@@ -50,10 +48,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         progressDialog = MessageProgressDialog(requireActivity())
-        takePhotoService = TakePhotoService(
-            this,
-            requireContext()
-        )
+        takePhotoService = TakePhotoService(this, requireContext())
 
         loadData()
         StringUtils.maskPhoneField(fieldPhone)
@@ -64,10 +59,7 @@ class ProfileFragment : Fragment() {
 
     private fun showPictureDialog() {
         val pictureDialog = AlertDialog.Builder(context)
-        val pictureDialogItems = arrayOf(
-            "Select photo from gallery",
-            "Capture photo from camera"
-        )
+        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture photo from camera")
         pictureDialog.setItems(pictureDialogItems) { _, which ->
             when (which) {
                 0 -> {
@@ -86,15 +78,12 @@ class ProfileFragment : Fragment() {
 
         btnLogin.setOnClickListener {
 
-            if (!isValidFields())
-                return@setOnClickListener
+            if (!isValidFields()) return@setOnClickListener
 
             val userData = PreferenceManagerService.retrieveUserData();
-            val profileRequest = ChangeProfileRequest(
-                fieldFullName.text.toString().trim(),
-                userData.phone,
-                StringUtils.getUnmaskedPhone(fieldPhone)
-            )
+            val profileRequest = ChangeProfileRequest(fieldFullName.text.toString().trim(),
+                    userData.phone,
+                    StringUtils.getUnmaskedPhone(fieldPhone))
 
             makeRegisterWithNetworkCall(profileRequest, multiPartFile)
         }
@@ -103,66 +92,50 @@ class ProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            OPERATION_CAPTURE_PHOTO ->
-                if (resultCode == Activity.RESULT_OK) {
-                    multiPartFile =
-                        takePhotoService.resultForImageCapture(imageUri, profile_picture)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
+            OPERATION_CAPTURE_PHOTO -> if (resultCode == Activity.RESULT_OK) {
+                multiPartFile = takePhotoService.resultForImageCapture(imageUri, profile_picture)
+            } else {
+                Toast.makeText(requireContext(),
                         "Something went wrong take chose photo again",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            OPERATION_CHOOSE_PHOTO ->
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    multiPartFile = takePhotoService.resultForImageGallery(data, profile_picture)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
+                        Toast.LENGTH_LONG).show()
+            }
+            OPERATION_CHOOSE_PHOTO -> if (resultCode == Activity.RESULT_OK && data != null) {
+                multiPartFile = takePhotoService.resultForImageGallery(data, profile_picture)
+            } else {
+                Toast.makeText(requireContext(),
                         "Something went wrong please chose photo again",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                        Toast.LENGTH_LONG).show()
+            }
         }
     }
 
 
-    private fun makeRegisterWithNetworkCall(
-        changeProfileBody: ChangeProfileRequest,
-        image: MultipartBody.Part?
-    ) {
+    private fun makeRegisterWithNetworkCall(changeProfileBody: ChangeProfileRequest,
+                                            image: MultipartBody.Part?) {
         if (image == null) Log.d("TAG", "test")
-        RetrofitClient
-            .INSTANCE
-            .changeUserProfile(changeProfileBody, image)
-            .onErrorReturn {
-                it.printStackTrace()
-                ErrorClass(false, getString(R.string.general_error))
+        RetrofitClient.INSTANCE.changeUserProfile(changeProfileBody, image).onErrorReturn {
+            it.printStackTrace()
+            ErrorClass(false, getString(R.string.general_error))
+        }.doOnRequest {
+            AppExecutorsService.mainThread().execute {
+                btnLogin.isEnabled = false
+                progressDialog.loading()
             }
-            .doOnRequest {
-                AppExecutorsService.mainThread().execute {
-                    btnLogin.isEnabled = false
-                    progressDialog.loading()
+        }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
+            AppExecutorsService.mainThread().execute {
+                progressDialog.show(it.message)
+                if (it.success) {
+                    AppExecutorsService.handlerDelayed({
+                        progressDialog.dismiss()
+                    }, 1000)
+                } else {
+                    btnLogin.isEnabled = true
+                    AppExecutorsService.handlerDelayed({
+                        progressDialog.dismiss()
+                    }, 3000)
                 }
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.newThread())
-            .subscribe {
-                AppExecutorsService.mainThread().execute {
-                    progressDialog.show(it.message)
-                    if (it.success) {
-                        AppExecutorsService.handlerDelayed({
-                            progressDialog.dismiss()
-                        }, 1000)
-                    } else {
-                        btnLogin.isEnabled = true
-                        AppExecutorsService.handlerDelayed({
-                            progressDialog.dismiss()
-                        }, 3000)
-                    }
-                }
-            }
+        }
 
 
     }
@@ -174,10 +147,7 @@ class ProfileFragment : Fragment() {
         fieldFullName.setText(userData.fullName)
         fieldPhone.setText(userData.phone)
 
-        Picasso
-            .get()
-            .load(userData.imageUrl)
-            .placeholder(R.drawable.account_on)
+        Picasso.get().load(userData.imageUrl).placeholder(R.drawable.account_on)
             .into(profile_picture)
 
         AppExecutorsService.handlerDelayed({ progressDialog.dismiss() }, 1000)
@@ -189,29 +159,15 @@ class ProfileFragment : Fragment() {
             fieldFullName.requestFocus()
             fieldFullName.error = getString(R.string.fill_field_please)
             return false
-        } else {
-            val isValidFullName = Pattern
-                .compile(getString(R.string.full_name_regex))
-                .matcher(fieldFullName.text.toString())
-                .matches()
-            if (!isValidFullName || fieldFullName.text.length < 5) {
-                fieldFullName.requestFocus()
-                fieldFullName.error = getString(R.string.valid_field_please)
-                return false
-            }
         }
-
-
 
         if (fieldPhone.text.isEmpty()) {
             fieldPhone.requestFocus()
             fieldPhone.error = getString(R.string.fill_field_please)
             return false
         } else {
-            val isValidPhone = Pattern
-                .compile(getString(R.string.phone_number_regex))
-                .matcher(StringUtils.getUnmaskedPhone(fieldPhone))
-                .matches()
+            val isValidPhone = Pattern.compile(getString(R.string.phone_number_regex))
+                .matcher(StringUtils.getUnmaskedPhone(fieldPhone)).matches()
 
             if (!isValidPhone) {
                 fieldPhone.requestFocus()

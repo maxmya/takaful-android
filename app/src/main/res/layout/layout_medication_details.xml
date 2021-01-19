@@ -70,7 +70,7 @@
 
     <TextView
         android:id="@+id/address"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/_250sdp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_35sdp"
@@ -83,18 +83,17 @@
 
 
     <ImageView
-        android:visibility="invisible"
         android:id="@+id/phone_point"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/point"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/phone"
         app:layout_constraintTop_toTopOf="@+id/phone" />
 
     <TextView
-        android:visibility="invisible"
         android:id="@+id/phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,6 +102,7 @@
         android:fontFamily="@font/sans_plain"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/_15ssp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/address"
         tools:text="Phone 532151" />

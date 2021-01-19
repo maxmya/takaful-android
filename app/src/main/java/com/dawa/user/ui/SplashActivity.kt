@@ -14,19 +14,12 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         AppExecutorsService.handlerDelayed({
-                openDesiredActivityPath()
-            }, 3000
-        )
+            openDesiredActivityPath()
+        }, 3000)
     }
 
     private fun openDesiredActivityPath() {
-        if (PreferenceManagerService.retrieveToken().isEmpty()) {
-            val intent = Intent(this, UserActivity::class.java)
-            startActivity(intent)
-        } else {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-        }
-        finish()
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 }
