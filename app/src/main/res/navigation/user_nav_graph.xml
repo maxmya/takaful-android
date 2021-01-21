@@ -54,5 +54,8 @@
         <argument
             android:name="phoneNumber"
             app:argType="string" />
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/login" />
     </fragment>
 </navigation>
