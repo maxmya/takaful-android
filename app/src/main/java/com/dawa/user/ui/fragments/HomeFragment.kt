@@ -90,9 +90,8 @@ class HomeFragment : Fragment() {
 
         my_medications.setOnClickListener {
             if (PreferenceManagerService.retrieveToken().isEmpty()) {
-                Toast.makeText(requireContext(),
-                        "Please Register Account To Be Able To View Your Medications",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "من فضلك قم بتسجيل الدخول اولا", Toast.LENGTH_LONG)
+                    .show();
             } else {
                 val toMyMedications = HomeFragmentDirections.toMyMedications()
                 Navigation.findNavController(it).navigate(toMyMedications)

@@ -61,7 +61,7 @@ class MedicationDetailsFragment : Fragment() {
             reserveButton.setOnClickListener {
                 if (PreferenceManagerService.retrieveToken().isEmpty()) {
                     Toast.makeText(requireContext(),
-                            "Please Register Account To Be Able To Preserve A Medication",
+                            "من فضلك قم بتسجيل الدخول اولا",
                             Toast.LENGTH_LONG).show();
                 } else yesNoDialog.show("هل انت متاكد من حجز هذا الدواء ؟")
             }

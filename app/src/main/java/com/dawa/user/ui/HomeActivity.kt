@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
             override fun onCentreButtonClick() {
                 if (PreferenceManagerService.retrieveToken().isEmpty()) {
                     Toast.makeText(this@HomeActivity,
-                            "Please Register Account To Be Able To Add Medication",
+                            "من فضلك قم بتسجيل الدخول اولا حتي تتمكن من اضافه دواء",
                             Toast.LENGTH_LONG).show();
                 } else navController.navigate(R.id.addMedicationFragment)
             }
@@ -64,25 +64,19 @@ class HomeActivity : AppCompatActivity() {
         when (itemIndex) {
             0 -> {
                 if (PreferenceManagerService.retrieveToken().isEmpty()) {
-                    Toast.makeText(this,
-                            "Please Register Account To Be Able To View Profile",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "من فضلك قم بتسجيل الدخول اولا", Toast.LENGTH_LONG).show();
                 } else {
                     navController.navigate(R.id.profileFragment)
                 }
             }
             1 -> {
                 if (PreferenceManagerService.retrieveToken().isEmpty()) {
-                    Toast.makeText(this,
-                            "Please Register Account To Be Able To View Notifications",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "من فضلك قم بتسجيل الدخول اولا", Toast.LENGTH_LONG).show();
                 } else navController.navigate(R.id.myNotificationListFragment)
             }
             2 -> {
                 if (PreferenceManagerService.retrieveToken().isEmpty()) {
-                    Toast.makeText(this,
-                            "Please Register Account To Be Able To View Presentations",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "من فضلك قم بتسجيل الدخول اولا", Toast.LENGTH_LONG).show();
                 } else navController.navigate(R.id.preservationsFragment)
             }
             3 -> {
