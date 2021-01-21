@@ -12,13 +12,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dawa.user.R
-import com.dawa.user.handlers.AppExecutorsService
-import com.dawa.user.handlers.PreferenceManagerService
-import com.dawa.user.handlers.OPERATION_CAPTURE_PHOTO
-import com.dawa.user.handlers.OPERATION_CHOOSE_PHOTO
-import com.dawa.user.handlers.TakePhotoService
+import com.dawa.user.handlers.*
 import com.dawa.user.network.data.*
 import com.dawa.user.network.retrofit.RetrofitClient
+import com.dawa.user.ui.SplashActivity
 import com.dawa.user.ui.dialogs.MessageProgressDialog
 import com.dawa.user.utils.StringUtils
 import com.squareup.picasso.Picasso
@@ -54,6 +51,11 @@ class ProfileFragment : Fragment() {
         StringUtils.maskPhoneField(fieldPhone)
         uploadImage.setOnClickListener { showPictureDialog() }
         editUserProfileAction()
+
+        logout.setOnClickListener {
+            LogoutHandler.doLogout()
+            requireActivity().startActivity(Intent(requireContext(), SplashActivity::class.java))
+        }
     }
 
 

@@ -82,14 +82,6 @@ class RegistrationFragment : Fragment() {
             fieldFullName.requestFocus()
             fieldFullName.error = getString(R.string.fill_field_please)
             return false
-        } else {
-            val isValidFullName = Pattern.compile(getString(R.string.full_name_regex))
-                .matcher(fieldFullName.text.toString()).matches()
-            if (!isValidFullName || fieldFullName.text.length < 5) {
-                fieldFullName.requestFocus()
-                fieldFullName.error = getString(R.string.valid_field_please)
-                return false
-            }
         }
 
         if (fieldPassword.text.isEmpty()) {
@@ -125,7 +117,15 @@ class RegistrationFragment : Fragment() {
 
             if (!isValidFields()) return@setOnClickListener
 
-            val phoneForFirebase = getUnmaskedPhone(fieldPhone)
+            var phoneForFirebase = getUnmaskedPhone(fieldPhone)
+            if (phoneForFirebase.startsWith("00")) {
+                val phoneAsCharArr = phoneForFirebase.toCharArray()
+                phoneAsCharArr[0] = ' '
+                phoneAsCharArr[1] = '+'
+
+                phoneForFirebase = String(phoneAsCharArr).replace(" ", "")
+            }
+
             Log.d(TAG, "registerAction: phone is $phoneForFirebase")
 
             PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneForFirebase,

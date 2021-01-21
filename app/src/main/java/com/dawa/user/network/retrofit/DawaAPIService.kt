@@ -37,8 +37,7 @@ interface DawaAPIService {
 
     @Multipart
     @PUT("user/auth/user")
-    fun changeUserProfile(@Part("body") body: ChangeProfileRequest,
-                          @Part file: MultipartBody.Part?): Flowable<ErrorClass>
+    fun changeUserProfile(@Part("body") body: ChangeProfileRequest, @Part file: MultipartBody.Part?): Flowable<ErrorClass>
 
 
     @GET("medication/list/mine")
@@ -59,5 +58,12 @@ interface DawaAPIService {
 
     @DELETE("user/auth/preservation/{id}")
     fun deletePreservation(@Path("id") id: Int): Flowable<ResponseWrapper<Any>>
+
+    @GET("user/auth/registered/{phone}")
+    fun isUserRegistered(@Path("phone") phone: String): Flowable<ResponseWrapper<Boolean>>
+
+    @POST("user/auth/changePassword")
+    fun changeUserPassword(@Body changePasswordRequest: ChangePasswordRequest): Flowable<ResponseWrapper<Boolean>>
+
 
 }

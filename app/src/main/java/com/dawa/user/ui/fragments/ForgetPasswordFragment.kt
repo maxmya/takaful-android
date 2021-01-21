@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.dawa.user.R
 import com.dawa.user.handlers.AppExecutorsService
+import com.dawa.user.network.data.ResponseWrapper
+import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.dialogs.AuthCodeDialog
 import com.dawa.user.ui.dialogs.MessageProgressDialog
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_forget_password.*
 import java.util.concurrent.TimeUnit
 
@@ -92,10 +95,44 @@ class ForgetPasswordFragment : Fragment(R.layout.layout_forget_password) {
                         Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            sendPhoneVerification(phoneNumber = phoneText.text.toString())
+            // check user is registered
+            checkIfUserIsRegistered(phoneText.text.toString())
         }
 
 
+    }
+
+    private fun checkIfUserIsRegistered(phoneNumber: String) {
+        RetrofitClient.INSTANCE.isUserRegistered(phoneNumber).onErrorReturn {
+            if (it.message != null) {
+                ResponseWrapper(false, it.message!!, false)
+            } else {
+                ResponseWrapper(false, "error occurred", false)
+            }
+        }.doOnRequest {
+            AppExecutorsService.mainThread().execute {
+                progressDialog.loading()
+            }
+        }.subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe {
+            if (it.success && it.data == true) {
+                if (phoneNumber.startsWith("00")) {
+                    val phoneAsCharArr = phoneNumber.toCharArray()
+                    phoneAsCharArr[0] = ' '
+                    phoneAsCharArr[1] = '+'
+                    val newPhone = String(phoneAsCharArr).replace(" ", "")
+                    sendPhoneVerification(newPhone)
+                } else sendPhoneVerification(phoneNumber)
+            } else {
+                AppExecutorsService.mainThread().execute {
+                    Toast.makeText(requireContext(),
+                            "هذا الهاتف غير مسجل لدينا , من فضلك قم بتسجيل حساب ثم تسجيل الدخول",
+                            Toast.LENGTH_SHORT).show()
+                }
+            }
+            AppExecutorsService.mainThread().execute {
+                progressDialog.dismiss()
+            }
+        }
     }
 
     private fun sendPhoneVerification(phoneNumber: String) {

@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.layout_add_medication.*
 import okhttp3.MultipartBody
 import java.util.*
 
+
 const val LOCATION_REQUEST = 300
 
 class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -257,12 +258,18 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 progressDialog.show(it.message)
                 if (it.success) {
                     progressDialog.dismiss()
+                    AppExecutorsService.handlerDelayed({
+                        requireActivity().supportFragmentManager.popBackStack()
+                    }, 1000)
                 } else {
                     progressDialog.generalError()
+                    AppExecutorsService.handlerDelayed({ progressDialog.dismiss() }, 1000)
                 }
+
             }
 
         }
     }
+
 
 }

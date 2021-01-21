@@ -158,7 +158,7 @@
                         android:background="@drawable/rounded_shape_edit_text"
                         android:fontFamily="@font/sans_plain"
                         android:hint="@string/phone_hint"
-                        android:inputType="phone"
+                        android:inputType="text"
                         android:lines="1"
                         android:nextFocusForward="@id/btnCreate"
                         android:padding="@dimen/_2sdp"
