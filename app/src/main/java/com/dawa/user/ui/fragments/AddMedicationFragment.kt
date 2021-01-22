@@ -60,6 +60,7 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var addressLat: Double = 0.0
     private var addressLng: Double = 0.0
 
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -72,7 +73,6 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
         progressDialog = MessageProgressDialog(requireActivity())
         takePhotoService = TakePhotoService(this, requireContext())
         loadCategories()
-        getLocation()
 
         add_image.setOnClickListener {
             showPictureDialog()
@@ -88,6 +88,18 @@ class AddMedicationFragment : Fragment(), AdapterView.OnItemSelectedListener {
             val openMap = AddMedicationFragmentDirections.toMap(floatArrayOf(addressLat.toFloat(),
                     addressLng.toFloat()))
             Navigation.findNavController(it).navigate(openMap)
+        }
+
+        requireArguments().let {
+            val locationData = AddMedicationFragmentArgs.fromBundle(it).locationData
+            if (locationData != null) {
+                val location = Location("Test")
+                location.latitude = locationData.latDouble
+                location.longitude = locationData.lngDouble
+                updateAddressUI(location)
+            } else {
+                getLocation()
+            }
         }
 
 
