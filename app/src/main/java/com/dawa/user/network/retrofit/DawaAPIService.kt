@@ -18,6 +18,8 @@ interface DawaAPIService {
 
     @GET("medication/list")
     fun listMedications(@Query("q") query: String?,
+                        @Query("lat") latitude: String,
+                        @Query("lng") longitude: String,
                         @Query("size") size: String,
                         @Query("page") page: String): Flowable<Pageable<MedicationsDTO>>
 

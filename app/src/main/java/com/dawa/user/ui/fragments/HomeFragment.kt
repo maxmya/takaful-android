@@ -1,12 +1,17 @@
 package com.dawa.user.ui.fragments
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,11 +25,19 @@ import com.dawa.user.network.retrofit.RetrofitClient
 import com.dawa.user.ui.HomeActivity
 import com.dawa.user.ui.UserActivity
 import com.dawa.user.ui.dialogs.MessageProgressDialog
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_home.*
 
 
 class HomeFragment : Fragment() {
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private var addressLat: Double = 0.0
+    private var addressLng: Double = 0.0
 
     lateinit var progressDialog: MessageProgressDialog
     lateinit var medicationsAdapter: HomeMedicationsAdapter
@@ -39,9 +52,68 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.layout_home, container, false)
     }
 
+    private fun checkLocationPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun askForLocationPermission() {
+        ActivityCompat.requestPermissions(requireActivity(),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_REQUEST)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<out String>,
+                                            grantResults: IntArray) {
+
+        if (requestCode == LOCATION_REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getLocation()
+        }
+    }
+
+    @SuppressLint("MissingPermission") // I handle it in another place !
+    private fun updateLocation() {
+        val locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 1000
+        locationRequest.fastestInterval = 5000
+        fusedLocationProviderClient = FusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.myLooper())
+    }
+
+    private fun getLocation() {
+        if (addressLat != 0.0 && addressLng != 0.0) {
+            getListOfMedications(page.toString(), null)
+            return
+        }
+
+        if (checkLocationPermission()) {
+            updateLocation()
+        } else {
+            askForLocationPermission()
+        }
+    }
+
+    var firstTime = true
+
+    private var locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            addressLat = locationResult.lastLocation.latitude
+            addressLng = locationResult.lastLocation.longitude
+            if (firstTime) {
+                firstTime = false
+                getListOfMedications(page.toString(), null)
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressDialog = MessageProgressDialog(requireActivity())
+        getLocation()
 
         if (PreferenceManagerService.retrieveToken().isEmpty()) {
             signIn.visibility = View.VISIBLE
@@ -58,7 +130,7 @@ class HomeFragment : Fragment() {
         medications_list.layoutManager = gridLayout
         medications_list.adapter = medicationsAdapter
         val query = searchView.query!!.toString()
-        getListOfMedications(page.toString(), null)
+
         medications_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (gridLayout.findLastVisibleItemPosition() == gridLayout.itemCount - 1 && hasMore) {
@@ -102,7 +174,11 @@ class HomeFragment : Fragment() {
 
 
     private fun getListOfMedications(pageNumber: String?, query: String?) {
-        RetrofitClient.INSTANCE.listMedications(query, "20", pageNumber.toString()).onErrorReturn {
+        RetrofitClient.INSTANCE.listMedications(query,
+                addressLat.toString(),
+                addressLng.toString(),
+                "20",
+                pageNumber.toString()).onErrorReturn {
             Pageable()
         }.doOnRequest {
             AppExecutorsService.mainThread().execute {
